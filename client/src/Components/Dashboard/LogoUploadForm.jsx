@@ -52,16 +52,13 @@ const LogoUploadForm = ({ closeModal }) => {
         toast.error("Failed to upload logo");
       }
     } else {
-      toast.error("Failed to upload image", {
-        appearance: "error",
-        autoDismiss: true,
-      });
+      toast.error("Failed to upload image");
     }
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="space-y-2">
+      <form onSubmit={handleSubmit} className="space-y-2 ">
         <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center">
           {!logoPreview ? (
             <label className="w-full h-full flex flex-col items-center text-center cursor-pointer relative">
