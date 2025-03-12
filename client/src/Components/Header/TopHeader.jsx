@@ -150,12 +150,14 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
         </div>
 
         {/* Sign Up Button */}
-        <button
-          onClick={openRegisterModal}
-          className="lg:hidden bg-signUpColor text-customWhite px-3 py-1 whitespace-nowrap h-min rounded-sm font-bold text-sm"
-        >
-          Sign Up
-        </button>
+        {!user && (
+          <button
+            onClick={openRegisterModal}
+            className="lg:hidden bg-signUpColor text-customWhite px-3 py-1 whitespace-nowrap h-min rounded-sm font-bold text-sm"
+          >
+            Sign Up
+          </button>
+        )}
 
         {/* Login Button */}
         {!user && (
