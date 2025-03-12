@@ -12,6 +12,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { logout, setCredentials } from "../../redux/slices/authSlice";
 import { useGetHomeControlsQuery } from "../../redux/features/allApis/homeControlApi/homeControlApi";
+import DynamicModal from "../modals/DynamicModal";
+import RegistrationForm from "../forms/RegistrationForm";
 
 const TopHeader = ({ settingOpen, setSettingOpen }) => {
   const { data: homeControls } = useGetHomeControlsQuery();
@@ -22,6 +24,7 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
   const navigate = useNavigate();
   const [validationCode, setValidationCode] = useState(generateRandomCode());
   const [enteredValidationCode, setEnteredValidationCode] = useState(""); // State for entered validation code
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
   const control = homeControls?.find(
     (control) => control.category === "logo" && control.isSelected
@@ -126,6 +129,14 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
   // Check if the entered validation code matches the generated code
   const isValidationCodeValid = enteredValidationCode === validationCode;
 
+  const openRegisterModal = () => {
+    setIsRegisterModalOpen(true);
+  };
+
+  const closeRegisterModal = () => {
+    setIsRegisterModalOpen(false);
+  };
+
   return (
     <div className="bg-topHeaderColor py-3 px-2   flex flex-row gap-2 items-center justify-between">
       <div className="flex flex-row items-center justify-between w-full lg:w-auto gap-2">
@@ -139,9 +150,12 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
         </div>
 
         {/* Sign Up Button */}
-        {/* <button className="lg:hidden bg-signUpColor text-customWhite px-3 py-1 whitespace-nowrap h-min rounded-sm font-bold text-sm">
+        <button
+          onClick={openRegisterModal}
+          className="lg:hidden bg-signUpColor text-customWhite px-3 py-1 whitespace-nowrap h-min rounded-sm font-bold text-sm"
+        >
           Sign Up
-        </button> */}
+        </button>
 
         {/* Login Button */}
         {!user && (
@@ -294,9 +308,12 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
                 {isLoading ? "..." : "Login"}
               </button>
 
-              {/* <button className="bg-signUpColor text-customWhite px-3 py-1 whitespace-nowrap h-min rounded-md font-bold text-sm ">
+              <button
+                onClick={openRegisterModal}
+                className="bg-signUpColor text-customWhite px-3 py-1 whitespace-nowrap h-min rounded-md font-bold text-sm "
+              >
                 Sign Up
-              </button> */}
+              </button>
             </div>
           </div>{" "}
         </>
@@ -406,6 +423,7 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
           </div>
         </>
       )}
+      {isRegisterModalOpen && <RegistrationForm onClose={closeRegisterModal} />}
     </div>
   );
 };
