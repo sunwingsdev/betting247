@@ -1,0 +1,25 @@
+/* Importing Google Font: Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+/* Apply the Poppins font to body and the specific text */
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+/* Smooth transition for background gradient change */
+.bg-gradient-to-r {
+    transition: background-image 0.3s ease-in-out;
+  }
+
+  footer {
+    background-color: #000; /* Black background */
+    color: #fff; /* White text */
+    text-align: center;
+    padding: 1rem 0;
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.5); /* Optional shadow */
+  }
+  
+  

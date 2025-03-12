@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .clip-top-utilities {
+    clip-path: ellipse(100% 90% at 50% 0%);
+  }
+}
+
+.bg-custom-gradient {
+  background: linear-gradient(
+    180deg,
+    rgba(20, 20, 20, 0.6) 0%,
+    rgba(10, 10, 10, 0.9) 100%
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.text-glow {
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+}
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-wrapper {
+  overflow: hidden;
+  display: flex;
+  white-space: nowrap;
+  position: relative;
+}
+
+.marquee {
+  display: flex;
+  animation: marquee 50s linear infinite;
+  min-width: 300%;
+}
+
+@media (max-width: 480px) {
+  .marquee {
+    min-width: max-content;
+    animation-duration: 50s;
+  }
+}
+
+.marquee:hover {
+  animation-play-state: paused;
+}
