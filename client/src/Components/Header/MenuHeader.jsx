@@ -5,8 +5,11 @@ import { IoSettingsSharp } from "react-icons/io5";
 import { MdEdit } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import TopHeader from "./TopHeader";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const MenuHeader = () => {
+  const { user } = useSelector((state) => state.auth);
   const [settingOpen, setSettingOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -31,16 +34,16 @@ const MenuHeader = () => {
     { label: "Tennis", link: "/tennis" },
     {
       label: "Result",
-      // link: "/result"
+      link: "/result",
     },
-    { label: "Casino", link: "/casino" },
+    { label: "Casino", link: "#" },
     {
       label: "Women's Premier League",
-      //  link: "/womenleague"
+      link: "/womenleague",
     },
     {
       label: "Aviator",
-      //  link: "/womenleague"
+      link: "#",
     },
   ];
   const [showSecondButton, setShowSecondButton] = useState(false);
@@ -102,8 +105,12 @@ const MenuHeader = () => {
             <li
               key={index}
               onClick={() => {
-                if (index === 6 || index === 8) {
-                  setOpenModal(true);
+                if (index === 7 || index === 9) {
+                  user
+                    ? toast.error(
+                        "This feature is not available yet.Please connect api."
+                      )
+                    : toast.error("Please login first.");
                 }
               }}
               className={`border-customBlack  border-r text-customBlack border-opacity-20 font-bold ${
@@ -154,8 +161,8 @@ const MenuHeader = () => {
           <div
             className="relative cursor-pointer text-left"
             // login page design
-            onClick={() => setOpenModal(true)}
-            // onClick={() => setIsChecked(!isChecked)}
+            // onClick={() => setOpenModal(true)}
+            onClick={() => setIsChecked(!isChecked)}
           >
             <button
               className={`hover:underline px-8 border-t-2 border-topGreenBorder  py-1 text-textYellowColor font-medium text-sm ${
@@ -194,7 +201,7 @@ const MenuHeader = () => {
           <div
             ref={settingRef}
             className="relative cursor-pointer"
-            // onClick={() => setSettingOpen((prev) => !prev)}
+            onClick={() => setSettingOpen((prev) => !prev)}
           >
             <p className="hover:underline font-semibold text-sm">Setting</p>
             <svg
