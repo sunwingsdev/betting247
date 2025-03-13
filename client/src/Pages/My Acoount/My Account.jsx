@@ -7,6 +7,7 @@ import MyBets from "../../Components/MyAccount/MyBets";
 import Activity from "../../Components/MyAccount/Activity";
 import Deposit from "../../Components/MyAccount/Deposit";
 import Withdraw from "../../Components/MyAccount/Withdraw";
+import PtoPTransfer from "../../Components/MyAccount/PtoPTransfer";
 
 const MyAccount = () => {
   const tabs = [
@@ -14,9 +15,10 @@ const MyAccount = () => {
     { id: 2, label: "Deposit" },
     { id: 3, label: "Withdraw" },
     { id: 4, label: "Balance OverView" },
-    { id: 5, label: "Account Statement" },
-    { id: 6, label: "My Bets" },
-    { id: 7, label: "Activity Log" },
+    { id: 5, label: "P2P Transfer" },
+    { id: 6, label: "Account Statement" },
+    { id: 7, label: "My Bets" },
+    { id: 8, label: "Activity Log" },
   ];
   const betSummary = [
     {
@@ -147,12 +149,13 @@ const MyAccount = () => {
         {activeTab === 3 && <Withdraw />}
 
         {activeTab === 4 && <BalanceOverview />}
+        {activeTab === 5 && <PtoPTransfer />}
 
-        {activeTab === 5 && <AccountStatement />}
+        {activeTab === 6 && <AccountStatement />}
 
-        {activeTab === 6 && <MyBets />}
+        {activeTab === 7 && <MyBets />}
 
-        {activeTab === 7 && <Activity />}
+        {activeTab === 8 && <Activity />}
       </div>
     </div>
   );
