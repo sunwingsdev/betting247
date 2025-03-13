@@ -11,7 +11,7 @@ const UsersData = () => {
   const filteredUsers = users?.filter(
     (singleUser) =>
       (singleUser?.role ? singleUser?.role === role : "user" === role) &&
-      singleUser?.createdBy === user?._id
+      (singleUser?.createdBy === user?._id || "self")
   );
 
   return (

@@ -12,7 +12,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { logout, setCredentials } from "../../redux/slices/authSlice";
 import { useGetHomeControlsQuery } from "../../redux/features/allApis/homeControlApi/homeControlApi";
-import DynamicModal from "../modals/DynamicModal";
 import RegistrationForm from "../forms/RegistrationForm";
 
 const TopHeader = ({ settingOpen, setSettingOpen }) => {

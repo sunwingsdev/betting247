@@ -34,6 +34,7 @@ import AccountSummary from "../Components/Dashboard/AccountSummary";
 import AccountTabs from "../Components/Dashboard/AccountTabs";
 import AccountStatementTabs from "../Components/Dashboard/AccountStatementTabs";
 import Profile from "../Components/Dashboard/Profile";
+import AddGame from "../Pages/Dashboard/AddGame";
 
 const router = createBrowserRouter([
   {
@@ -88,6 +89,7 @@ const router = createBrowserRouter([
       { path: "adminsetting", element: <AdminSetting /> },
       { path: "gameapi", element: <Game /> },
       { path: "homecontrol", element: <HomeControl /> },
+      { path: "addgame", element: <AddGame /> },
       { path: "myaccount", element: <MyAccount /> },
       { path: "betlist", element: <BetList /> },
       { path: "betlive", element: <BetListLive /> },

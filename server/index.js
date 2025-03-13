@@ -9,6 +9,7 @@ const { upload, deleteFile } = require("./utils");
 // import API modules
 const usersApi = require("./apis/usersApi/usersApi");
 const homeControlApi = require("./apis/homeControlApi/homeControlApi");
+const gameApi = require("./apis/gameApi/gameApi");
 
 const port = process.env.PORT || 5000;
 
@@ -84,10 +85,12 @@ async function run() {
     // Collections
     const usersCollection = client.db("baji").collection("users");
     const homeControlsCollection = client.db("baji").collection("homeControls");
+    const gamesCollection = client.db("baji").collection("games");
 
     // API routes
     app.use("/users", usersApi(usersCollection));
     app.use("/home-controls", homeControlApi(homeControlsCollection));
+    app.use("/games", gameApi(gamesCollection));
 
     await client.db("admin").command({ ping: 1 });
     console.log("Connected to MongoDB!!!✅");

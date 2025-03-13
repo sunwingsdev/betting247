@@ -1,26 +1,30 @@
 import { useParams } from "react-router-dom";
+import { useGetGamesQuery } from "../../redux/features/allApis/gameApi/gameApi";
 
 const DemoGame = () => {
   const { id } = useParams();
 
-  const demoGames = [
-    {
-      id: "aviator",
-      gameLink: "https://demo.spribe.io/launch/aviator?currency=BDT&lang=EN",
-    },
-    {
-      id: "super-ace",
-      gameLink: "https://www.jopi.com/gam/summer-maze",
-    },
-  ];
+  const { data: games, isLoading } = useGetGamesQuery();
 
-  const game = demoGames.find((game) => game.id === id);
+  const game = games.find((game) => game._id === id);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!game.link) {
+    return (
+      <div className="text-center text-2xl font-bold text-red-500">
+        This game is not available to play
+      </div>
+    );
+  }
 
   return (
     <div>
       <iframe
         className="w-full h-[600px] max-h-screen"
-        src={game.gameLink}
+        src={game.link}
         frameBorder="0"
         allowFullScreen
       ></iframe>

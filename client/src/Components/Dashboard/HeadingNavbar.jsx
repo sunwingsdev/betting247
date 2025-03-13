@@ -72,6 +72,11 @@ function HeadingNavbar() {
           path: "/admindashboard/homecontrol",
           roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
         },
+        {
+          label: "Add Game Api Key",
+          path: "/admindashboard/addgame",
+          roles: ["admin"],
+        },
       ],
     },
     {

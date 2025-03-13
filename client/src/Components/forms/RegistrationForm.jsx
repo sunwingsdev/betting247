@@ -32,6 +32,7 @@ const RegistrationForm = ({ onClose }) => {
     // eslint-disable-next-line no-unused-vars
     const { confirmPassword, ...userInfo } = data;
     userInfo.createdBy = "self";
+    userInfo.role = "user";
     const result = await addUser(userInfo);
     if (result?.data?.insertedId) {
       toast.success("User created successfully");
@@ -39,7 +40,7 @@ const RegistrationForm = ({ onClose }) => {
       reset();
     }
     if (result?.error) {
-      toast.error("Something went wrong");
+      toast.error(result.error.data.error);
     }
   };
 
