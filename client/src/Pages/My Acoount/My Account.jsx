@@ -1,18 +1,24 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import MyProfile from "../../Components/MyAccount/MyProfile";
 import BalanceOverview from "../../Components/MyAccount/BalanceOverview";
 import AccountStatement from "../../Components/MyAccount/AccountStatement";
 import MyBets from "../../Components/MyAccount/MyBets";
 import Activity from "../../Components/MyAccount/Activity";
+import Deposit from "../../Components/MyAccount/Deposit";
+import Withdraw from "../../Components/MyAccount/Withdraw";
+import PtoPTransfer from "../../Components/MyAccount/PtoPTransfer";
 
 const MyAccount = () => {
   const tabs = [
     { id: 1, label: "My Profile" },
-    { id: 2, label: "Balance OverView" },
-    { id: 3, label: "Account Statement" },
-    { id: 4, label: "My Bets" },
-    { id: 5, label: "Activity Log" },
+    { id: 2, label: "Deposit" },
+    { id: 3, label: "Withdraw" },
+    { id: 4, label: "Balance OverView" },
+    { id: 5, label: "P2P Transfer" },
+    { id: 6, label: "Account Statement" },
+    { id: 7, label: "My Bets" },
+    { id: 8, label: "Activity Log" },
   ];
   const betSummary = [
     {
@@ -139,14 +145,17 @@ const MyAccount = () => {
 
       <div className="w-full bg-inPlayBgColor">
         {activeTab === 1 && <MyProfile />}
+        {activeTab === 2 && <Deposit />}
+        {activeTab === 3 && <Withdraw />}
 
-        {activeTab === 2 && <BalanceOverview />}
+        {activeTab === 4 && <BalanceOverview />}
+        {activeTab === 5 && <PtoPTransfer />}
 
-        {activeTab === 3 && <AccountStatement />}
+        {activeTab === 6 && <AccountStatement />}
 
-        {activeTab === 4 && <MyBets />}
+        {activeTab === 7 && <MyBets />}
 
-        {activeTab === 5 && <Activity />}
+        {activeTab === 8 && <Activity />}
       </div>
     </div>
   );
