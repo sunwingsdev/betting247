@@ -142,13 +142,13 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
     <div className="bg-topHeaderColor py-3 px-2   flex flex-row gap-2 items-center justify-between">
       <div className="flex flex-row items-center justify-between w-full lg:w-auto gap-2">
         {/* Logo */}
-        <div className="">
+        <Link to="/" className="">
           <img
             src={`${import.meta.env.VITE_BASE_API_URL}${control?.image}`}
             alt=""
             className="w-full max-w-[100px] lg:max-w-[150px]"
           />
-        </div>
+        </Link>
 
         {/* Sign Up Button */}
         {!user && (
