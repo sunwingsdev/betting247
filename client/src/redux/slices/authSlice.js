@@ -4,6 +4,7 @@ const initialState = {
   token: localStorage.getItem("token") || null,
   user: JSON.parse(localStorage.getItem("user")) || null,
   isAuthenticated: !!localStorage.getItem("token"),
+  singleUser: null, // Add singleUser to the initial state
 };
 
 const authSlice = createSlice({
@@ -23,9 +24,10 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      state.singleUser = null;
     },
     setSingleUser: (state, { payload }) => {
-      state.singleUser = payload; // Update singleUser in the state
+      state.singleUser = payload;
     },
   },
 });

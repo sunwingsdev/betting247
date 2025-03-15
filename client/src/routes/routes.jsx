@@ -35,6 +35,7 @@ import AccountTabs from "../Components/Dashboard/AccountTabs";
 import AccountStatementTabs from "../Components/Dashboard/AccountStatementTabs";
 import Profile from "../Components/Dashboard/Profile";
 import AddGame from "../Pages/Dashboard/AddGame";
+import DashboardDeposits from "../Pages/Dashboard/DashboardDeposits";
 
 const router = createBrowserRouter([
   {
@@ -62,7 +63,14 @@ const router = createBrowserRouter([
         element: <Sports />,
       },
       { path: "/womenleague", element: <WommenLeague /> },
-      { path: "/myaccount", element: <MyAccount /> },
+      {
+        path: "/myaccount",
+        element: (
+          <PrivateRoute>
+            <MyAccount />
+          </PrivateRoute>
+        ),
+      },
       {
         path: "/myaccountphone",
         element: (
@@ -98,6 +106,7 @@ const router = createBrowserRouter([
       { path: "deactivegame", element: <DeactiveGame /> },
       { path: "livegame", element: <LiveGame /> },
       { path: "usersdata/:role", element: <UsersData /> },
+      { path: "deposits", element: <DashboardDeposits /> },
     ],
   },
   { path: "/admin", element: <Banner /> },

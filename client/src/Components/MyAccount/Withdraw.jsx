@@ -6,7 +6,7 @@ import upay from "../../assets/withdraw/Upay.png";
 
 const Withdraw = () => {
   return (
-    <div className="w-4/5">
+    <div className="w-full md:w-4/5">
       <h1 className="text-black mb-1">Withdraw</h1>
       <div className="bg-white rounded-md p-3">
         <form className="mt-4 flex flex-col gap-6">

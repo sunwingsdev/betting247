@@ -179,6 +179,15 @@ function HeadingNavbar() {
         { label: "Live Game", path: "/admindashboard/livegame" },
       ],
     },
+    {
+      label: "Self department",
+      path: null, // No path for parent menu with sub-items
+      subItems: [
+        { label: "Deposits", path: "/admindashboard/deposits" },
+        // { label: "Deactive Game", path: "/admindashboard/deactivegame" },
+        // { label: "Live Game", path: "/admindashboard/livegame" },
+      ],
+    },
   ];
   const handleTabClick = (tab) => {
     setActiveTab(tab);

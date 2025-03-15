@@ -56,6 +56,37 @@ const CarouselLargeDevice = () => {
                 alt={item.title}
                 className="w-full h-full border-b-8 border-loginColor"
               />
+              {section.title === "first row" && i === 0 && (
+                <div className="absolute pt-3 p-2 bg-customBlack70 text-sm top-0 right-0">
+                  <Link className=" text-customWhite" to="/inplay">
+                    <div className="flex items-center pb-2 animate-pulse">
+                      <span className="bg-liveRedColor rounded-sm  border-l-8 border-customWhite font-bold text-md px-2">
+                        LIVE
+                      </span>
+                    </div>
+                    <ul className="text-customWhite  flex flex-col gap-x-5 gap-y-1">
+                      <div className="flex  flex-row justify-between gap-x-2">
+                        <li>Cricket</li>
+                        <span className="w-auto text-center px-1 rounded-sm bg-customWhite text-customBlack">
+                          7
+                        </span>
+                      </div>
+                      <div className="flex flex-row justify-between  gap-x-5">
+                        <li>Soccer</li>
+                        <span className="w-auto text-center px-1 rounded-sm bg-customWhite text-customBlack">
+                          14
+                        </span>
+                      </div>
+                      <div className="flex flex-row justify-between gap-x-12">
+                        <li>Tennis</li>
+                        <span className="w-auto inline-block rounded-sm px-1 text-center bg-customWhite text-customBlack ">
+                          11
+                        </span>
+                      </div>
+                    </ul>
+                  </Link>
+                </div>
+              )}
               <h3 className="absolute bottom-2 w-full text-customWhite text-left py-1 capitalize lg:px-2 px-2 md:px-4 font-bold bg-customBlack70 lg:text-sm text-xs">
                 {item.title}
               </h3>

@@ -7,23 +7,40 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
   useLazyGetAuthenticatedUserQuery,
+  useLazyGetUserByIdQuery,
   useLoginUserMutation,
 } from "../../redux/features/allApis/usersApi/usersApi";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, setCredentials } from "../../redux/slices/authSlice";
+import {
+  logout,
+  setCredentials,
+  setSingleUser,
+} from "../../redux/slices/authSlice";
 import { useGetHomeControlsQuery } from "../../redux/features/allApis/homeControlApi/homeControlApi";
 import RegistrationForm from "../forms/RegistrationForm";
+import { IoIosLogIn } from "react-icons/io";
+import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 
 const TopHeader = ({ settingOpen, setSettingOpen }) => {
   const { data: homeControls } = useGetHomeControlsQuery();
-  const { user, token } = useSelector((state) => state.auth);
+  const { user, token, singleUser } = useSelector((state) => state.auth);
   const [loginUser, { isLoading }] = useLoginUserMutation();
   const [getUser] = useLazyGetAuthenticatedUserQuery();
+  const [getSingleUser] = useLazyGetUserByIdQuery();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [validationCode, setValidationCode] = useState(generateRandomCode());
   const [enteredValidationCode, setEnteredValidationCode] = useState(""); // State for entered validation code
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    getSingleUser(user?._id).then(({ data }) => {
+      dispatch(setSingleUser(data));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const control = homeControls?.find(
     (control) => control.category === "logo" && control.isSelected
@@ -66,6 +83,20 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
   const [showPassword, setShowPassword] = useState(false);
   const handleChange = (e, setter) => {
     setter(e.target.value);
+  };
+
+  const reloadBalance = () => {
+    if (!user) return;
+
+    setLoading(true);
+
+    getSingleUser(user?._id)
+      .then(({ data }) => {
+        dispatch(setSingleUser(data));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handelLogin = async () => {
@@ -139,7 +170,7 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
   };
 
   return (
-    <div className="bg-topHeaderColor py-3 px-2   flex flex-row gap-2 items-center justify-between">
+    <div className="bg-gradient-to-b from-[#3a3a3a] to-black py-3 px-2   flex flex-row gap-2 items-center justify-between">
       <div className="flex flex-row items-center justify-between w-full lg:w-auto gap-2">
         {/* Logo */}
         <Link to="/" className="">
@@ -149,41 +180,28 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
             className="w-full max-w-[100px] lg:max-w-[150px]"
           />
         </Link>
+        <div className="flex items-center justify-center gap-3">
+          {/* Login Button */}
+          {!user && (
+            <div className="relative lg:hidden">
+              <Link className="" to="/login">
+                <button className="bg-loginRedColor flex items-center justify-center gap-2 text-customWhite px-3 py-1 h-min rounded-sm font-medium text-sm">
+                  Login <IoIosLogIn className="text-lg" />
+                </button>
+              </Link>
+            </div>
+          )}
+          {/* Sign Up Button */}
+          {!user && (
+            <button
+              onClick={openRegisterModal}
+              className="lg:hidden bg-yellow-500 text-black px-3 py-1 whitespace-nowrap h-min font-medium text-sm flex items-center justify-center gap-1"
+            >
+              Sign Up <FaArrowUpRightFromSquare />
+            </button>
+          )}
+        </div>
 
-        {/* Sign Up Button */}
-        {!user && (
-          <button
-            onClick={openRegisterModal}
-            className="lg:hidden bg-signUpColor text-customWhite px-3 py-1 whitespace-nowrap h-min rounded-sm font-bold text-sm"
-          >
-            Sign Up
-          </button>
-        )}
-
-        {/* Login Button */}
-        {!user && (
-          <div className="relative lg:hidden">
-            <Link className="" to="/login">
-              <button className="bg-loginRedColor text-customWhite px-8 py-1 h-min rounded-sm font-bold text-sm">
-                Login
-              </button>
-              <span className="absolute top-0 left-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="white"
-                  className="w-7 h-auto"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12 12a4 4 0 100-8 4 4 0 000 8zm-7 8a7 7 0 1114 0H5z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </span>
-            </Link>
-          </div>
-        )}
         <div className="relative hidden lg:flex flex-col gap-2">
           {/* Search Input */}
           <div className="relative">
@@ -302,20 +320,26 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
 
             <div className="flex flex-row gap-1 ">
               <button
-                className={`bg-loginRedColor text-customWhite px-4 py-1 h-min rounded-md font-bold text-sm ${
+                className={`bg-loginRedColor text-customWhite px-4 py-1 h-min font-bold text-sm ${
                   !isValidationCodeValid ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 onClick={handelLogin}
                 disabled={!isValidationCodeValid || !username || !password}
               >
-                {isLoading ? "..." : "Login"}
+                {isLoading ? (
+                  "..."
+                ) : (
+                  <div className=" flex items-center justify-center gap-1">
+                    Login <IoIosLogIn className="text-lg" />
+                  </div>
+                )}
               </button>
 
               <button
                 onClick={openRegisterModal}
-                className="bg-signUpColor text-customWhite px-3 py-1 whitespace-nowrap h-min rounded-md font-bold text-sm "
+                className="bg-yellow-500 text-black px-3 py-1 whitespace-nowrap h-min font-medium text-sm flex items-center justify-center gap-1"
               >
-                Sign Up
+                Sign Up <FaArrowUpRightFromSquare />
               </button>
             </div>
           </div>{" "}
@@ -333,7 +357,11 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
             <div className="flex flex-row items-center font-medium rounded-[4px]  bg-signUpColor lg:bg-none whitespace-nowrap text-[10px] lg:text-xs lg:border border-sliderButtonMediumGray text-textYellowColor  lg:text-customWhite relative">
               <div className="flex flex-row items-center lg:py-1 hover:underline cursor-pointer  px-2   gap-2">
                 <h3 className="">
-                  Main <span className="font-bold "> PBU 0.00</span>
+                  Main{" "}
+                  <span className="font-bold ">
+                    {" "}
+                    PBU {loading ? "..." : singleUser?.balance || 0.0}
+                  </span>
                 </h3>
                 <p className="">
                   {" "}
@@ -344,7 +372,12 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
                 </button>
               </div>
               <span className="border-l py-[6px] lg:py-1 px-1 text-customWhite lg:text-sliderButtonMediumGray border-customBlack lg:border-sliderButtonMediumGray">
-                <IoReload className="w-4 h-auto stroke-2" />
+                <IoReload
+                  onClick={reloadBalance}
+                  className={`w-4 h-auto stroke-2 ${
+                    loading ? "animate-spin" : ""
+                  }`}
+                />
               </span>
             </div>
             <span
