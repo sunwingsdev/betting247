@@ -61,11 +61,12 @@ const Deposit = () => {
   const [selectedChannel, setSelectedChannel] = useState("agent");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [filteredPaymentMethods, setFilteredPaymentMethods] = useState([]);
+  const [senderNumber, setSenderNumber] = useState("");
   const [transactionId, setTransactionId] = useState("");
   const [bdtAmount, setBdtAmount] = useState("");
   const [pbuAmount, setPbuAmount] = useState(0);
 
-  const conversionRate = 100; // 1 PBU = 100 BDT
+  const conversionRate = 100; 
 
   useEffect(() => {
     // Filter payment methods based on the selected channel
@@ -103,6 +104,10 @@ const Deposit = () => {
       toast.error("Please select a payment method.");
       return;
     }
+    if (!senderNumber) {
+      toast.error("Please enter the sender number.");
+      return;
+    }
     if (!transactionId) {
       toast.error("Please enter the transaction ID.");
       return;
@@ -117,6 +122,7 @@ const Deposit = () => {
       method: selectedPaymentMethod.name,
       number: selectedPaymentMethod.number,
       transactionId,
+      senderNumber,
       bdtAmount,
       pbuAmount,
       userId: user?._id,
@@ -130,6 +136,7 @@ const Deposit = () => {
       toast.success("Deposit request sent successfully!");
       setBdtAmount("");
       setTransactionId("");
+      setSenderNumber("");
       setPbuAmount(0);
       setSelectedChannel("agent");
       setSelectedPaymentMethod(null);
@@ -245,19 +252,34 @@ const Deposit = () => {
           </div>
 
           {selectedPaymentMethod && (
-            <div className="flex flex-col">
-              <label htmlFor="transactionId">
-                Transaction ID <span className="text-red-600">*</span>
-              </label>
-              <input
-                type="text"
-                name="transactionId"
-                value={transactionId}
-                onChange={(e) => setTransactionId(e.target.value)}
-                className="border border-gray-500 rounded outline-none px-2 py-1"
-                required
-              />
-            </div>
+            <>
+              <div className="flex flex-col">
+                <label htmlFor="transactionId">
+                  Sender Number <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="senderNumber"
+                  value={senderNumber}
+                  onChange={(e) => setSenderNumber(e.target.value)}
+                  className="border border-gray-500 rounded outline-none px-2 py-1"
+                  required
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="transactionId">
+                  Transaction ID <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="transactionId"
+                  value={transactionId}
+                  onChange={(e) => setTransactionId(e.target.value)}
+                  className="border border-gray-500 rounded outline-none px-2 py-1"
+                  required
+                />
+              </div>
+            </>
           )}
 
           <div className="flex w-full">

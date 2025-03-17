@@ -36,6 +36,7 @@ import AccountStatementTabs from "../Components/Dashboard/AccountStatementTabs";
 import Profile from "../Components/Dashboard/Profile";
 import AddGame from "../Pages/Dashboard/AddGame";
 import DashboardDeposits from "../Pages/Dashboard/DashboardDeposits";
+import DashboardWithdraw from "../Pages/Dashboard/DashboardWithdraw";
 
 const router = createBrowserRouter([
   {
@@ -107,6 +108,7 @@ const router = createBrowserRouter([
       { path: "livegame", element: <LiveGame /> },
       { path: "usersdata/:role", element: <UsersData /> },
       { path: "deposits", element: <DashboardDeposits /> },
+      { path: "withdraws", element: <DashboardWithdraw /> },
     ],
   },
   { path: "/admin", element: <Banner /> },

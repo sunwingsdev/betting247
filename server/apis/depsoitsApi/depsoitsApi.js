@@ -22,12 +22,42 @@ const depsoitsApi = (depositsCollection, usersCollection) => {
     }
   });
 
+  //   get all deposits
   router.get("/", async (req, res) => {
     try {
-      const deposits = await depositsCollection.find().toArray();
-      res.send(deposits);
-    } catch (err) {
-      res.status(500).send({ message: "Internal Server Error" });
+      const result = await depositsCollection
+        .aggregate([
+          {
+            $addFields: {
+              userId: { $toObjectId: "$userId" },
+            },
+          },
+          {
+            $lookup: {
+              from: "users",
+              localField: "userId",
+              foreignField: "_id",
+              as: "userInfo",
+            },
+          },
+          {
+            $unwind: {
+              path: "$userInfo",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          {
+            $project: {
+              "userInfo.password": 0,
+            },
+          },
+        ])
+        .toArray();
+
+      res.send(result);
+    } catch (error) {
+      console.error("Error fetching deposits:", error);
+      res.status(500).send({ error: "Failed to fetch deposits" });
     }
   });
 

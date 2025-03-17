@@ -61,7 +61,7 @@ const CommonNavMenu = () => {
                 - Main Balance:
               </span>{" "}
               <span className="text-gray-100 text-xs">
-                {singleUser?.balance} USD{" "}
+                {singleUser?.balance} PBU{" "}
               </span>{" "}
             </p>
             <button

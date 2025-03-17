@@ -1,11 +1,22 @@
 import { useState } from "react";
 import MenuItem from "./MenuItem";
 import { useSelector } from "react-redux";
+import { useGetDepositsQuery } from "../../redux/features/allApis/depositsApi/depositsApi";
+import { useGetWithdrawsQuery } from "../../redux/features/allApis/withdrawApi/withdrawApi";
 
 function HeadingNavbar() {
   const { user } = useSelector((state) => state.auth);
+  const { data: deposits } = useGetDepositsQuery();
+  const { data: withdraws } = useGetWithdrawsQuery();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("");
+
+  const pendingDeposits = deposits?.filter(
+    (deposit) => deposit.status === "pending"
+  );
+  const pendingWithdraws = withdraws?.filter(
+    (withdraw) => withdraw.status === "pending"
+  );
 
   const menuItems = [
     {
@@ -55,22 +66,22 @@ function HeadingNavbar() {
         {
           label: "General Setting",
           path: "/admindashboard/generalsetting",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          roles: ["admin"],
         },
         {
           label: "Admin Setting",
           path: "/admindashboard/adminsetting",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          roles: ["admin"],
         },
         {
           label: "Game Api Key",
           path: "/admindashboard/gameapi",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          roles: ["admin"],
         },
         {
           label: "Home Control",
           path: "/admindashboard/homecontrol",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          roles: ["admin"],
         },
         {
           label: "Add Game Api Key",
@@ -174,18 +185,39 @@ function HeadingNavbar() {
       label: "Game Center",
       path: null, // No path for parent menu with sub-items
       subItems: [
-        { label: "Active Game", path: "/admindashboard/activegame" },
-        { label: "Deactive Game", path: "/admindashboard/deactivegame" },
-        { label: "Live Game", path: "/admindashboard/livegame" },
+        {
+          label: "Active Game",
+          path: "/admindashboard/activegame",
+          roles: ["admin"],
+        },
+        {
+          label: "Deactive Game",
+          path: "/admindashboard/deactivegame",
+          roles: ["admin"],
+        },
+        {
+          label: "Live Game",
+          path: "/admindashboard/livegame",
+          roles: ["admin"],
+        },
       ],
     },
     {
       label: "Self department",
       path: null, // No path for parent menu with sub-items
       subItems: [
-        { label: "Deposits", path: "/admindashboard/deposits" },
-        // { label: "Deactive Game", path: "/admindashboard/deactivegame" },
-        // { label: "Live Game", path: "/admindashboard/livegame" },
+        {
+          label: "Deposits",
+          path: "/admindashboard/deposits",
+          pending: pendingDeposits?.length,
+          roles: ["admin"],
+        },
+        {
+          label: "Withdraws",
+          path: "/admindashboard/withdraws",
+          pending: pendingWithdraws?.length,
+          roles: ["admin"],
+        },
       ],
     },
   ];

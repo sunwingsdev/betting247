@@ -9,17 +9,21 @@ import Activity from "../../Components/MyAccount/Activity";
 import Deposit from "../../Components/MyAccount/Deposit";
 import Withdraw from "../../Components/MyAccount/Withdraw";
 import PtoPTransfer from "../../Components/MyAccount/PtoPTransfer";
+import DepositHistory from "../../Components/MyAccount/DepositHistory";
+import WithdrawHistory from "../../Components/MyAccount/WithdrawHistory";
 
 const MyAccount = () => {
   const tabs = [
     { id: 1, label: "My Profile" },
     { id: 2, label: "Deposit" },
-    { id: 3, label: "Withdraw" },
-    { id: 4, label: "Balance OverView" },
-    { id: 5, label: "P2P Transfer" },
-    { id: 6, label: "Account Statement" },
-    { id: 7, label: "My Bets" },
-    { id: 8, label: "Activity Log" },
+    { id: 3, label: "Deposit History" },
+    { id: 4, label: "Withdraw" },
+    { id: 5, label: "Withdraw History" },
+    { id: 6, label: "Balance OverView" },
+    { id: 7, label: "P2P Transfer" },
+    { id: 8, label: "Account Statement" },
+    { id: 9, label: "My Bets" },
+    { id: 10, label: "Activity Log" },
   ];
 
   const [activeTab, setActiveTab] = useState(1);
@@ -88,12 +92,14 @@ const MyAccount = () => {
         <div className="w-full md:w-[70%] bg-inPlayBgColor">
           {activeTab === 1 && <MyProfile />}
           {activeTab === 2 && <Deposit />}
-          {activeTab === 3 && <Withdraw />}
-          {activeTab === 4 && <BalanceOverview />}
-          {activeTab === 5 && <PtoPTransfer />}
-          {activeTab === 6 && <AccountStatement />}
-          {activeTab === 7 && <MyBets />}
-          {activeTab === 8 && <Activity />}
+          {activeTab === 3 && <DepositHistory />}
+          {activeTab === 4 && <Withdraw />}
+          {activeTab === 5 && <WithdrawHistory />}
+          {activeTab === 6 && <BalanceOverview />}
+          {activeTab === 7 && <PtoPTransfer />}
+          {activeTab === 8 && <AccountStatement />}
+          {activeTab === 9 && <MyBets />}
+          {activeTab === 10 && <Activity />}
         </div>
       </div>
     </div>

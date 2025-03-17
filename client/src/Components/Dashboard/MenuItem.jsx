@@ -60,6 +60,11 @@ const MenuItem = ({ item, activeTab, handleTabClick }) => {
                 onClick={() => handleTabClick(subItem.path)}
               >
                 {subItem.label}
+                {(subItem.pending || subItem.pending > 0) && (
+                  <span className="ml-2  bg-red-600 px-2 text-white rounded-full">
+                    {subItem?.pending == "0" ? "" : subItem.pending}
+                  </span>
+                )}
               </Link>
             </li>
           ))}

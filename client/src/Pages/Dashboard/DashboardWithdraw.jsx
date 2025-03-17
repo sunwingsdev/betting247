@@ -1,14 +1,15 @@
 import moment from "moment";
-import {
-  useGetDepositsQuery,
-  useUpdateStatusMutation,
-} from "../../redux/features/allApis/depositsApi/depositsApi";
-import toast from "react-hot-toast";
 
-const DashboardDeposits = () => {
-  const { data: deposits, isLoading } = useGetDepositsQuery();
+import toast from "react-hot-toast";
+import {
+  useGetWithdrawsQuery,
+  useUpdateWithdrawStatusMutation,
+} from "../../redux/features/allApis/withdrawApi/withdrawApi";
+
+const DashboardWithdraw = () => {
+  const { data: deposits, isLoading, refetch } = useGetWithdrawsQuery();
   const [updateStatus, { isLoading: updateStatusLoading }] =
-    useUpdateStatusMutation();
+    useUpdateWithdrawStatusMutation();
 
   const handleUpdateStatus = async (id) => {
     const result = await updateStatus(id);
@@ -17,6 +18,7 @@ const DashboardDeposits = () => {
     }
     if (result.data.modifiedCount > 0) {
       toast.success("Status updated successfully");
+      refetch();
     }
   };
 
@@ -27,8 +29,8 @@ const DashboardDeposits = () => {
       <table className="min-w-full divide-y divide-gray-300">
         <thead className="bg-headerGray text-headingTextColor text-center">
           <tr>
-            <th className="border-y bg-headerGray border-gray-300 px-4 py-2 text-center text-sm font-medium uppercase">
-              Channel
+            <th className="border-y bg-headerGray border-gray-300 px-12 py-2 text-center text-sm font-medium uppercase">
+              Username
             </th>
             <th className="border-y bg-headerGray border-gray-300 px-4 py-2 text-center text-sm font-medium uppercase">
               Method
@@ -36,18 +38,14 @@ const DashboardDeposits = () => {
             <th className="border-y bg-headerGray border-gray-300 px-2 py-2 text-center text-sm font-medium uppercase">
               Number
             </th>
-            <th className="border-y bg-headerGray border-gray-300 px-4 py-2 text-center text-sm font-medium uppercase">
-              Transaction ID
-            </th>
+
             <th className="border-y bg-headerGray border-gray-300 px-2 py-2 text-center text-sm font-medium uppercase">
               BDT Amount
             </th>
             <th className="border-y bg-headerGray border-gray-300 px-2 py-2 text-center text-sm font-medium uppercase">
               PBU Amount
             </th>
-            <th className="border-y bg-headerGray border-gray-300 px-12 py-2 text-center text-sm font-medium uppercase">
-              Username
-            </th>
+
             <th className="border-y bg-headerGray border-gray-300 px-12 py-2 text-center text-sm font-medium uppercase">
               Status
             </th>
@@ -63,29 +61,23 @@ const DashboardDeposits = () => {
           {deposits?.map((row, index) => (
             <tr key={index} className="text-center">
               <td className="border-b px-4 py-2 whitespace-nowrap text-sm text-gray-700">
-                {/* <button className="w-6 h-6 bg-green-500  font-sans text-white text-xs rounded-sm">
-                  AD
-                </button> */}
-                <span className="text-blue-500 pl-2">{row.channel}</span>
+                {row?.userInfo?.username}
               </td>
+
               <td className="capitalize border-b px-4 py-2 whitespace-nowrap text-sm text-gray-700">
                 {row?.method}
               </td>
               <td className="border-b px-4 py-2 whitespace-nowrap text-sm text-red-700">
                 {row.number}
               </td>
-              <td className="border-b px-2 py-2 whitespace-nowrap text-sm text-gray-700">
-                {row?.transactionId}
-              </td>
+
               <td className="border-b px-2 py-2 whitespace-nowrap text-sm text-gray-700">
                 {row?.bdtAmount}
               </td>
               <td className="border-b px-4 py-2 whitespace-nowrap text-sm text-gray-700">
                 {row?.pbuAmount}
               </td>
-              <td className="border-b px-4 py-2 whitespace-nowrap text-sm text-gray-700">
-                {row?.userInfo?.username}
-              </td>
+
               <td className="border-b px-4 py-2 whitespace-nowrap text-sm text-gray-700">
                 <div className="flex flex-row items-center justify-center space-x-1 ">
                   {row?.status === "pending" ? (
@@ -164,4 +156,4 @@ const DashboardDeposits = () => {
   );
 };
 
-export default DashboardDeposits;
+export default DashboardWithdraw;

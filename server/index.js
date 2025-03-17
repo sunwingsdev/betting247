@@ -11,6 +11,7 @@ const usersApi = require("./apis/usersApi/usersApi");
 const homeControlApi = require("./apis/homeControlApi/homeControlApi");
 const gameApi = require("./apis/gameApi/gameApi");
 const depositApi = require("./apis/depsoitsApi/depsoitsApi");
+const withdrawApi = require("./apis/withdrawApi/withdrawApi");
 
 const port = process.env.PORT || 5000;
 
@@ -93,12 +94,14 @@ async function run() {
     const homeControlsCollection = client.db("baji").collection("homeControls");
     const gamesCollection = client.db("baji").collection("games");
     const depositsCollection = client.db("baji").collection("deposits");
+    const withdrawsCollection = client.db("baji").collection("withdraws");
 
     // API routes
     app.use("/users", usersApi(usersCollection));
     app.use("/home-controls", homeControlApi(homeControlsCollection));
     app.use("/games", gameApi(gamesCollection));
     app.use("/deposits", depositApi(depositsCollection, usersCollection));
+    app.use("/withdraws", withdrawApi(withdrawsCollection, usersCollection));
 
     await client.db("admin").command({ ping: 1 });
     console.log("Connected to MongoDB!!!✅");
