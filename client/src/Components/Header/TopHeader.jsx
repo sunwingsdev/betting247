@@ -20,9 +20,11 @@ import { useGetHomeControlsQuery } from "../../redux/features/allApis/homeContro
 import RegistrationForm from "../forms/RegistrationForm";
 import { IoIosLogIn } from "react-icons/io";
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
+import { useGetColorControlsQuery } from "../../redux/features/allApis/colorControlApi/colorControlApi";
 
 const TopHeader = ({ settingOpen, setSettingOpen }) => {
   const { data: homeControls } = useGetHomeControlsQuery();
+  const { data: colorControls } = useGetColorControlsQuery();
   const { user, token, singleUser } = useSelector((state) => state.auth);
   const [loginUser, { isLoading }] = useLoginUserMutation();
   const [getUser] = useLazyGetAuthenticatedUserQuery();
@@ -33,6 +35,10 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
   const [enteredValidationCode, setEnteredValidationCode] = useState(""); // State for entered validation code
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const headingColorControl = colorControls?.find(
+    (colorControl) => colorControl?.section === "home-header"
+  );
 
   useEffect(() => {
     if (!user) return;
@@ -170,7 +176,16 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-[#3a3a3a] to-black py-3 px-2   flex flex-row gap-2 items-center justify-between">
+    <div
+      style={{
+        backgroundImage: `linear-gradient(to ${
+          headingColorControl?.direction || "top"
+        }, ${headingColorControl?.firstBackgroundColor || "#3a3a3a"}, ${
+          headingColorControl?.secondBackgroundColor || "#000000"
+        })`,
+      }}
+      className=" py-3 px-2   flex flex-row gap-2 items-center justify-between"
+    >
       <div className="flex flex-row items-center justify-between w-full lg:w-auto gap-2">
         {/* Logo */}
         <Link to="/" className="">

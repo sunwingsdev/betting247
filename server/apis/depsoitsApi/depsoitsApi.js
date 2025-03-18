@@ -63,6 +63,7 @@ const depsoitsApi = (depositsCollection, usersCollection) => {
 
   router.patch("/update-status/:id", async (req, res) => {
     const { id } = req.params;
+    const { status } = req.body;
     try {
       const deposit = await depositsCollection.findOne({
         _id: new ObjectId(id),
@@ -80,15 +81,17 @@ const depsoitsApi = (depositsCollection, usersCollection) => {
       if (!user) {
         return res.status(404).send({ message: "User not found" });
       }
-      await depositsCollection.findOneAndUpdate(
+      const result = await depositsCollection.findOneAndUpdate(
         { _id: new ObjectId(id) },
-        { $set: { status: "approved" } },
+        { $set: { status: status } },
         { returnDocument: "after" }
       );
-      const result = await usersCollection.updateOne(
-        { _id: new ObjectId(deposit.userId) },
-        { $inc: { balance: deposit.pbuAmount } }
-      );
+      if (status === "approved") {
+        await usersCollection.updateOne(
+          { _id: new ObjectId(deposit.userId) },
+          { $inc: { balance: deposit.pbuAmount } }
+        );
+      }
       res.send(result);
     } catch (err) {
       res.status(500).send({ message: "Internal Server Error" });

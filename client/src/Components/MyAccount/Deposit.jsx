@@ -2,89 +2,44 @@ import { useState, useEffect } from "react";
 import personal from "../../assets/deposit/personal.png";
 import agent from "../../assets/deposit/agent.png";
 import merchant from "../../assets/deposit/merchant.png";
-import bkash from "../../assets/deposit/bkash.png";
-import nagad from "../../assets/deposit/nagad.png";
-import rocket from "../../assets/deposit/rocket.png";
 import { GoCopy } from "react-icons/go";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { useAddDepositMutation } from "../../redux/features/allApis/depositsApi/depositsApi";
-
-const paymentMethods = [
-  {
-    _id: 1,
-    name: "bkash",
-    channel: "agent",
-    image: bkash,
-    number: "01700000000",
-  },
-  {
-    _id: 2,
-    name: "nagad",
-    channel: "agent",
-    image: nagad,
-    number: "01900000000",
-  },
-  {
-    _id: 3,
-    name: "rocket",
-    channel: "agent",
-    image: rocket,
-    number: "01900000000",
-  },
-  {
-    _id: 4,
-    name: "bkash",
-    channel: "merchant",
-    image: bkash,
-    number: "01700000000",
-  },
-  {
-    _id: 5,
-    name: "nagad",
-    channel: "personal",
-    image: nagad,
-    number: "01900000000",
-  },
-  {
-    _id: 6,
-    name: "rocket",
-    channel: "personal",
-    image: rocket,
-    number: "01900000000",
-  },
-];
+import { useGetPaymentMethodsQuery } from "../../redux/features/allApis/paymentMethodApi/paymentMethodApi";
+import { uploadImage } from "../../hooks/files";
 
 const Deposit = () => {
   const { user } = useSelector((state) => state.auth);
+  const { data: paymentMethods } = useGetPaymentMethodsQuery();
   const [addDeposit, { isLoading }] = useAddDepositMutation();
   const [selectedChannel, setSelectedChannel] = useState("agent");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [filteredPaymentMethods, setFilteredPaymentMethods] = useState([]);
-  const [senderNumber, setSenderNumber] = useState("");
-  const [transactionId, setTransactionId] = useState("");
   const [bdtAmount, setBdtAmount] = useState("");
   const [pbuAmount, setPbuAmount] = useState(0);
+  const [tempInputValues, setTempInputValues] = useState({});
 
-  const conversionRate = 100; 
+  const conversionRate = 100;
 
   useEffect(() => {
-    // Filter payment methods based on the selected channel
-    const filtered = paymentMethods.filter(
+    const depositMethods =
+      paymentMethods?.filter(
+        (method) =>
+          method?.paymentType === "deposit" && method?.status === "active"
+      ) || [];
+    const filtered = depositMethods?.filter(
       (method) => method.channel === selectedChannel
     );
     setFilteredPaymentMethods(filtered);
-    // Reset selected payment method when channel changes
     setSelectedPaymentMethod(null);
-  }, [selectedChannel]);
+  }, [selectedChannel, paymentMethods]);
 
   useEffect(() => {
-    // Set the first channel as default
     setSelectedChannel("agent");
   }, []);
 
   useEffect(() => {
-    // Calculate PBU amount whenever BDT amount changes
     if (bdtAmount) {
       const calculatedPbu = parseFloat(bdtAmount) / conversionRate;
       setPbuAmount(calculatedPbu.toFixed(2)); // Limit to 2 decimal places
@@ -92,6 +47,13 @@ const Deposit = () => {
       setPbuAmount(0);
     }
   }, [bdtAmount]);
+
+  const handleInputChange = (name, value) => {
+    setTempInputValues((prevValues) => ({
+      ...prevValues,
+      [name]: value, // Update the temporary state
+    }));
+  };
 
   const handleCopyNumber = (number) => {
     navigator.clipboard.writeText(number);
@@ -104,28 +66,34 @@ const Deposit = () => {
       toast.error("Please select a payment method.");
       return;
     }
-    if (!senderNumber) {
-      toast.error("Please enter the sender number.");
-      return;
-    }
-    if (!transactionId) {
-      toast.error("Please enter the transaction ID.");
-      return;
-    }
     if (!bdtAmount) {
       toast.error("Please enter the BDT amount.");
       return;
     }
+    const paymentInputs = [];
+    for (const [name, value] of Object.entries(tempInputValues)) {
+      if (value instanceof File) {
+        try {
+          const { filePath } = await uploadImage(value);
+          paymentInputs.push({ [name]: filePath });
+          // eslint-disable-next-line no-unused-vars
+        } catch (error) {
+          toast.error("Failed to upload file. Please try again.");
+          continue;
+        }
+      } else {
+        paymentInputs.push({ [name]: value });
+      }
+    }
 
     const depositInfo = {
       channel: selectedChannel,
-      method: selectedPaymentMethod.name,
+      method: selectedPaymentMethod.method,
       number: selectedPaymentMethod.number,
-      transactionId,
-      senderNumber,
       bdtAmount,
       pbuAmount,
       userId: user?._id,
+      paymentInputs,
     };
     console.log(depositInfo);
 
@@ -135,11 +103,10 @@ const Deposit = () => {
     } else {
       toast.success("Deposit request sent successfully!");
       setBdtAmount("");
-      setTransactionId("");
-      setSenderNumber("");
       setPbuAmount(0);
       setSelectedChannel("agent");
       setSelectedPaymentMethod(null);
+      setTempInputValues({});
     }
 
     // You can add further logic here, such as making an API call
@@ -215,72 +182,93 @@ const Deposit = () => {
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="paymentMethod" className="mb-2">
-              Payment Method <span className="text-red-600">*</span>
-            </label>
             <div className="flex items-center gap-4">
-              {filteredPaymentMethods.map((method) => (
-                <div
-                  key={method._id}
-                  onClick={() => setSelectedPaymentMethod(method)}
-                  className={`cursor-pointer p-2 ${
-                    selectedPaymentMethod?._id === method._id
-                      ? "border-2 border-blue-500"
-                      : ""
-                  }`}
-                >
-                  <img
-                    src={method.image}
-                    alt={`${method.name} img`}
-                    className="w-32 object-contain"
+              {filteredPaymentMethods?.length === 0 ? (
+                <p className="text-center">No payment method found</p>
+              ) : (
+                filteredPaymentMethods?.map((method) => (
+                  <div
+                    key={method._id}
+                    onClick={() => setSelectedPaymentMethod(method)}
+                    className={`cursor-pointer p-2 ${
+                      selectedPaymentMethod?._id === method._id
+                        ? "border-2 border-blue-500"
+                        : ""
+                    }`}
+                  >
+                    <label htmlFor="paymentMethod" className="mb-2">
+                      Payment Method <span className="text-red-600">*</span>
+                    </label>
+                    <img
+                      src={`${import.meta.env.VITE_BASE_API_URL}${
+                        method.image
+                      }`}
+                      alt={`${method.method} img`}
+                      className="w-32 object-contain"
+                    />
+                  </div>
+                ))
+              )}
+            </div>
+            {selectedPaymentMethod?.number && (
+              <>
+                <div className="mt-2 p-3 bg-gray-100 rounded-md flex items-center gap-2">
+                  <p className="text-lg font-semibold text-gray-800">
+                    Payment Number: {selectedPaymentMethod.number}
+                  </p>
+
+                  <GoCopy
+                    className="text-xl cursor-pointer text-gray-500 hover:text-blue-800"
+                    onClick={() =>
+                      handleCopyNumber(selectedPaymentMethod.number)
+                    }
                   />
                 </div>
-              ))}
-            </div>
-            {selectedPaymentMethod && (
-              <div className="mt-2 p-3 bg-gray-100 rounded-md flex items-center gap-2">
-                <p className="text-lg font-semibold text-gray-800">
-                  Payment Number: {selectedPaymentMethod.number}
-                </p>
-
-                <GoCopy
-                  className="text-xl cursor-pointer text-gray-500 hover:text-blue-800"
-                  onClick={() => handleCopyNumber(selectedPaymentMethod.number)}
-                />
-              </div>
+              </>
             )}
           </div>
 
-          {selectedPaymentMethod && (
-            <>
-              <div className="flex flex-col">
+          {selectedPaymentMethod?.userInputs?.length &&
+            selectedPaymentMethod?.userInputs?.map((item) => (
+              <div key={item.name} className="flex flex-col">
                 <label htmlFor="transactionId">
-                  Sender Number <span className="text-red-600">*</span>
+                  {item.label}{" "}
+                  <span
+                    className={`text-red-600 ${
+                      item.isRequired === "required" ? "" : "hidden"
+                    }`}
+                  >
+                    *
+                  </span>
                 </label>
-                <input
-                  type="text"
-                  name="senderNumber"
-                  value={senderNumber}
-                  onChange={(e) => setSenderNumber(e.target.value)}
-                  className="border border-gray-500 rounded outline-none px-2 py-1"
-                  required
-                />
+
+                {item?.type === "file" ? (
+                  <input
+                    name={item?.name}
+                    type="file"
+                    className="w-full py-1.5 px-3 outline-none rounded-sm"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      handleInputChange(item?.name, file); // Update temporary state with the file
+                    }}
+                    required={item?.isRequired === "required"}
+                  />
+                ) : (
+                  <input
+                    name={item?.name}
+                    type={item?.type}
+                    className="w-full py-1.5 px-3 outline-none rounded-sm"
+                    placeholder={item?.label}
+                    value={tempInputValues[item?.name] || ""} // Bind to temporary state
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      handleInputChange(item?.name, value); // Update temporary state with the input value
+                    }}
+                    required={item?.isRequired === "required"}
+                  />
+                )}
               </div>
-              <div className="flex flex-col">
-                <label htmlFor="transactionId">
-                  Transaction ID <span className="text-red-600">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="transactionId"
-                  value={transactionId}
-                  onChange={(e) => setTransactionId(e.target.value)}
-                  className="border border-gray-500 rounded outline-none px-2 py-1"
-                  required
-                />
-              </div>
-            </>
-          )}
+            ))}
 
           <div className="flex w-full">
             <button

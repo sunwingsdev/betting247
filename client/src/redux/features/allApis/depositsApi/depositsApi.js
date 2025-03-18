@@ -17,9 +17,10 @@ const depositsApi = baseApi.injectEndpoints({
     }),
 
     updateStatus: builder.mutation({
-      query: (id) => ({
+      query: ({ id, data }) => ({
         url: `/deposits/update-status/${id}`,
         method: "PATCH",
+        body: data,
       }),
       invalidatesTags: ["deposits"],
     }),

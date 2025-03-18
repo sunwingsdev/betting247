@@ -7,9 +7,11 @@ import { RxCross2 } from "react-icons/rx";
 import TopHeader from "./TopHeader";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import { useGetColorControlsQuery } from "../../redux/features/allApis/colorControlApi/colorControlApi";
 
 const MenuHeader = () => {
   const { user } = useSelector((state) => state.auth);
+  const { data: colorControls } = useGetColorControlsQuery();
   const [settingOpen, setSettingOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -24,6 +26,10 @@ const MenuHeader = () => {
     50, 100, 200, 5000, 1000, 2000,
   ]);
   const [editedAmounts, setEditedAmounts] = useState([...amounts]);
+
+  const navbarColorControl = colorControls?.find(
+    (colorControl) => colorControl.section === "home-navbar"
+  );
 
   const menuItems = [
     { label: "Home", link: "/" },
@@ -99,8 +105,17 @@ const MenuHeader = () => {
   return (
     <div>
       <TopHeader settingOpen={settingOpen} setSettingOpen={setSettingOpen} />
-      <div className="bg-commonYellowColor whitespace-nowrap   flex-row  items-center  hidden lg:flex md:hidden justify-between px-6 ">
-        <ul className="flex flex-row items-center  text-xs ">
+      <div
+        style={{
+          backgroundColor: navbarColorControl?.backgroundColor,
+          color: navbarColorControl?.textColor,
+          fontSize: navbarColorControl?.fontSize
+            ? navbarColorControl?.fontSize
+            : "14px",
+        }}
+        className="whitespace-nowrap flex-row  items-center  hidden lg:flex md:hidden justify-between px-6 "
+      >
+        <ul className="flex flex-row items-center">
           {menuItems.map((item, index) => (
             <li
               key={index}
@@ -113,7 +128,7 @@ const MenuHeader = () => {
                     : toast.error("Please login first.");
                 }
               }}
-              className={`border-customBlack  border-r text-customBlack border-opacity-20 font-bold ${
+              className={`border-customBlack  border-r  border-opacity-20 font-bold ${
                 [3, 4, 5, 9].includes(index) ? "relative" : "null"
               }
 

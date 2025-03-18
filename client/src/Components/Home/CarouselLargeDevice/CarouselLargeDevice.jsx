@@ -2,13 +2,18 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useGetGamesQuery } from "../../../redux/features/allApis/gameApi/gameApi";
+import { useGetColorControlsQuery } from "../../../redux/features/allApis/colorControlApi/colorControlApi";
 
 const CarouselLargeDevice = () => {
   const { data: games } = useGetGamesQuery();
+  const { data: colorControls } = useGetColorControlsQuery();
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const activatedGames = games?.filter((game) => game.isActive);
+  const buttonColorControl = colorControls?.find(
+    (colorControl) => colorControl?.section === "home-game-button"
+  );
 
   const handlePlay = (id, link) => {
     if (link) {
@@ -54,7 +59,11 @@ const CarouselLargeDevice = () => {
               <img
                 src={`${import.meta.env.VITE_BASE_API_URL}${item.image}`}
                 alt={item.title}
-                className="w-full h-full border-b-8 border-loginColor"
+                style={{
+                  border: "0 0 8px 0 solid",
+                  borderColor: buttonColorControl?.backgroundColor,
+                }}
+                className="w-full h-full border-b-8 "
               />
               {section.title === "first row" && i === 0 && (
                 <div className="absolute pt-3 p-2 bg-customBlack70 text-sm top-0 right-0">
@@ -87,13 +96,19 @@ const CarouselLargeDevice = () => {
                   </Link>
                 </div>
               )}
-              <h3 className="absolute bottom-2 w-full text-customWhite text-left py-1 capitalize lg:px-2 px-2 md:px-4 font-bold bg-customBlack70 lg:text-sm text-xs">
+              <h3 className="absolute bottom-2 w-full text-customWhite text-left py-0.5 capitalize lg:px-2 px-2 md:px-4 font-bold bg-customBlack70 lg:text-sm text-xs">
                 {item.title}
               </h3>
               <button
-                className="absolute bottom-2 right-0 border border-loginColor bg-loginColor px-5 md:px-7 py-0.5 transform text-xs lg:text-sm text-customBlack font-medium"
+                className="absolute bottom-0 right-0 ps-6 pe-1  md:ps-8 md:pe-5 py-0.5 md:py-1.5 transform lg:text-sm font-medium"
                 style={{
                   clipPath: "polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%)",
+                  backgroundColor: buttonColorControl?.backgroundColor,
+                  color: buttonColorControl?.textColor,
+                  fontSize:
+                    window.innerWidth <= 768
+                      ? `${parseFloat(buttonColorControl?.fontSize) - 4}px`
+                      : buttonColorControl?.fontSize,
                 }}
                 onClick={() => handlePlay(item?._id, item?.link)}
               >

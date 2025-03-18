@@ -37,6 +37,8 @@ import Profile from "../Components/Dashboard/Profile";
 import AddGame from "../Pages/Dashboard/AddGame";
 import DashboardDeposits from "../Pages/Dashboard/DashboardDeposits";
 import DashboardWithdraw from "../Pages/Dashboard/DashboardWithdraw";
+import ColorControl from "../Pages/Dashboard/ColorControl";
+import DepositMethod from "../Pages/Dashboard/DepositMethod";
 
 const router = createBrowserRouter([
   {
@@ -98,6 +100,7 @@ const router = createBrowserRouter([
       { path: "adminsetting", element: <AdminSetting /> },
       { path: "gameapi", element: <Game /> },
       { path: "homecontrol", element: <HomeControl /> },
+      { path: "colorcontrol", element: <ColorControl /> },
       { path: "addgame", element: <AddGame /> },
       { path: "myaccount", element: <MyAccount /> },
       { path: "betlist", element: <BetList /> },
@@ -109,6 +112,7 @@ const router = createBrowserRouter([
       { path: "usersdata/:role", element: <UsersData /> },
       { path: "deposits", element: <DashboardDeposits /> },
       { path: "withdraws", element: <DashboardWithdraw /> },
+      { path: "depositmethod", element: <DepositMethod /> },
     ],
   },
   { path: "/admin", element: <Banner /> },

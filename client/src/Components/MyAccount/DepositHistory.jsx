@@ -26,9 +26,7 @@ const DepositHistory = () => {
             <th className="border-y bg-headerGray border-gray-300 px-2 py-2 text-center text-sm font-medium uppercase">
               Number
             </th>
-            <th className="border-y bg-headerGray border-gray-300 px-4 py-2 text-center text-sm font-medium uppercase">
-              Transaction ID
-            </th>
+
             <th className="border-y bg-headerGray border-gray-300 px-2 py-2 text-center text-sm font-medium uppercase">
               BDT Amount
             </th>
@@ -58,9 +56,7 @@ const DepositHistory = () => {
               <td className="border-b px-4 py-2 whitespace-nowrap text-sm text-red-700">
                 {row.number}
               </td>
-              <td className="border-b px-2 py-2 whitespace-nowrap text-sm text-gray-700">
-                {row?.transactionId}
-              </td>
+
               <td className="border-b px-2 py-2 whitespace-nowrap text-sm text-gray-700">
                 {row?.bdtAmount}
               </td>

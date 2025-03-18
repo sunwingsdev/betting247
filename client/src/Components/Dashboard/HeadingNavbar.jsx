@@ -84,8 +84,18 @@ function HeadingNavbar() {
           roles: ["admin"],
         },
         {
+          label: "Color Control",
+          path: "/admindashboard/colorcontrol",
+          roles: ["admin"],
+        },
+        {
           label: "Add Game Api Key",
           path: "/admindashboard/addgame",
+          roles: ["admin"],
+        },
+        {
+          label: "Add Deposit Method",
+          path: "/admindashboard/depositmethod",
           roles: ["admin"],
         },
       ],
