@@ -61,6 +61,12 @@ const AdminDashboard = () => {
     (role) => Array.isArray(role.roles) && role.roles.includes(user?.role)
   );
 
+  const myClients = users?.filter((item) => item.createdBy === user?._id);
+  const totalBalance = myClients?.reduce(
+    (sum, user) => sum + (user.balance || 0),
+    0
+  );
+
   const onSubmit = async (data) => {
     // eslint-disable-next-line no-unused-vars
     const { confirmPassword, ...userInfo } = data;
@@ -144,7 +150,7 @@ const AdminDashboard = () => {
                     </svg>
                   </span>
                   <span className="ml-8 font-bold whitespace-nowrap">
-                    Add Admins
+                    Add Client
                   </span>
                 </button>
               </div>
@@ -171,11 +177,11 @@ const AdminDashboard = () => {
       <div className="py-2">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {[
-            { label: "Total Balance", value: "(1,776.57)" },
-            { label: "Remaining Balance", value: "USD(1,500.00)" },
-            { label: "Total Agent Balance", value: "USD(1,200.00)" },
-            { label: "Total Exposure", value: "USD(900.50)" },
-            { label: "Total Admin", value: "USD(800.00)" },
+            { label: "Total Balance", value: `(${totalBalance || "0.00"})` },
+            { label: "Remaining Balance", value: "USD(0.00)" },
+            { label: "Total Agent Balance", value: "USD(0.00)" },
+            { label: "Total Exposure", value: "USD(0.00)" },
+            { label: "Total Admin", value: "USD(0.00)" },
           ].map((item, index) => (
             <div
               key={index}

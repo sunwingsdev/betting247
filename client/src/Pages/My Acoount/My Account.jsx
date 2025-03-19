@@ -11,14 +11,20 @@ import Withdraw from "../../Components/MyAccount/Withdraw";
 import PtoPTransfer from "../../Components/MyAccount/PtoPTransfer";
 import DepositHistory from "../../Components/MyAccount/DepositHistory";
 import WithdrawHistory from "../../Components/MyAccount/WithdrawHistory";
+import { useSelector } from "react-redux";
 
 const MyAccount = () => {
-  const tabs = [
+  const { user } = useSelector((state) => state.auth);
+  const [activeTab, setActiveTab] = useState(1);
+  const location = useLocation();
+
+  // Define all tabs
+  const allTabs = [
     { id: 1, label: "My Profile" },
-    { id: 2, label: "Deposit" },
-    { id: 3, label: "Deposit History" },
-    { id: 4, label: "Withdraw" },
-    { id: 5, label: "Withdraw History" },
+    { id: 2, label: "Deposit", condition: user?.createdBy === "self" },
+    { id: 3, label: "Deposit History", condition: user?.createdBy === "self" },
+    { id: 4, label: "Withdraw", condition: user?.createdBy === "self" },
+    { id: 5, label: "Withdraw History", condition: user?.createdBy === "self" },
     { id: 6, label: "Balance OverView" },
     { id: 7, label: "P2P Transfer" },
     { id: 8, label: "Account Statement" },
@@ -26,8 +32,8 @@ const MyAccount = () => {
     { id: 10, label: "Activity Log" },
   ];
 
-  const [activeTab, setActiveTab] = useState(1);
-  const location = useLocation();
+  // Filter tabs based on user condition
+  const filteredTabs = allTabs.filter((tab) => tab.condition === undefined || tab.condition);
 
   useEffect(() => {
     const hash = location.hash.replace("#", "");
@@ -40,7 +46,7 @@ const MyAccount = () => {
     <div className="bg-inPlayBgColor px-4">
       {/* Tabs on top for mobile */}
       <div className="md:hidden flex overflow-x-auto bg-customWhite shadow-lg">
-        {tabs.map((tab) => (
+        {filteredTabs.map((tab) => (
           <button
             key={tab.id}
             className={`flex-1 px-4 py-2 text-sm whitespace-nowrap border-b-2 ${
@@ -67,7 +73,7 @@ const MyAccount = () => {
               My Account
             </h2>
           </div>
-          {tabs.map((tab) => (
+          {filteredTabs.map((tab) => (
             <div
               key={tab.id}
               className="text-sm border-b border-sliderButtonMediumGray"
@@ -91,10 +97,10 @@ const MyAccount = () => {
         {/* Tab content */}
         <div className="w-full md:w-[70%] bg-inPlayBgColor">
           {activeTab === 1 && <MyProfile />}
-          {activeTab === 2 && <Deposit />}
-          {activeTab === 3 && <DepositHistory />}
-          {activeTab === 4 && <Withdraw />}
-          {activeTab === 5 && <WithdrawHistory />}
+          {activeTab === 2 && user?.createdBy === "self" && <Deposit />}
+          {activeTab === 3 && user?.createdBy === "self" && <DepositHistory />}
+          {activeTab === 4 && user?.createdBy === "self" && <Withdraw />}
+          {activeTab === 5 && user?.createdBy === "self" && <WithdrawHistory />}
           {activeTab === 6 && <BalanceOverview />}
           {activeTab === 7 && <PtoPTransfer />}
           {activeTab === 8 && <AccountStatement />}

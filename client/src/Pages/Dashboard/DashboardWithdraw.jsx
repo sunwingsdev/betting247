@@ -7,20 +7,28 @@ import {
 } from "../../redux/features/allApis/withdrawApi/withdrawApi";
 
 const DashboardWithdraw = () => {
-  const { data: deposits, isLoading, refetch } = useGetWithdrawsQuery();
+  const { data: withdraws, isLoading, refetch } = useGetWithdrawsQuery();
   const [updateStatus, { isLoading: updateStatusLoading }] =
     useUpdateWithdrawStatusMutation();
 
-  const handleUpdateStatus = async (id) => {
-    const result = await updateStatus(id);
+  const handleUpdateStatus = async (id, status) => {
+    const statusInfo = { id, data: { status } };
+    const result = await updateStatus(statusInfo);
     if (result.error) {
-      toast.error(result.error.data.error);
+      console.log(result.error);
+      toast.error(result.error.data.message);
+      return;
     }
     if (result.data.modifiedCount > 0) {
       toast.success("Status updated successfully");
       refetch();
+      return;
     }
   };
+
+  const sortedWithdraws = withdraws?.slice().sort((a, b) => {
+    return moment(b.createdAt).diff(moment(a.createdAt));
+  });
 
   if (isLoading) return <div className="text-center mt-4">Loading...</div>;
 
@@ -58,7 +66,7 @@ const DashboardWithdraw = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {deposits?.map((row, index) => (
+          {sortedWithdraws?.map((row, index) => (
             <tr key={index} className="text-center">
               <td className="border-b px-4 py-2 whitespace-nowrap text-sm text-gray-700">
                 {row?.userInfo?.username}
@@ -91,11 +99,11 @@ const DashboardWithdraw = () => {
                           <circle cx="50" cy="50" r="40" fill="yellow" />
                         </svg>
                       </span>
-                      <span className="text-yellow-600 capitalize">
+                      <span className="text-yellow-800 capitalize">
                         {row?.status}
                       </span>
                     </>
-                  ) : (
+                  ) : row?.status === "approved" ? (
                     <>
                       <span className="text-green-800">
                         <svg
@@ -110,6 +118,21 @@ const DashboardWithdraw = () => {
                         {row?.status}
                       </span>
                     </>
+                  ) : (
+                    <>
+                      <span className="text-red-600">
+                        <svg
+                          className="w-3 h-3 "
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 100 100"
+                        >
+                          <circle cx="50" cy="50" r="40" fill="red" />
+                        </svg>
+                      </span>
+                      <span className="text-red-800 capitalize">
+                        {row?.status}
+                      </span>
+                    </>
                   )}
                 </div>
               </td>
@@ -119,15 +142,27 @@ const DashboardWithdraw = () => {
               </td>
               <td className="border-b lg:border-opacity-10 flex flex-row items-center justify-center space-x-2 px-12 py-2 whitespace-nowrap text-sm text-gray-700">
                 {row?.status === "pending" ? (
-                  <button
-                    onClick={() => handleUpdateStatus(row?._id)}
-                    disabled={updateStatusLoading}
-                    className="w-16 h-8 bg-green-600  font-sans text-white  rounded-sm disabled:bg-slate-400"
-                  >
-                    {updateStatusLoading ? "Loading..." : "Accept"}
-                  </button>
+                  <>
+                    <button
+                      onClick={() => handleUpdateStatus(row?._id, "approved")}
+                      disabled={updateStatusLoading}
+                      className="w-16 h-8 bg-green-600  font-sans text-white  rounded-sm disabled:bg-slate-400"
+                    >
+                      {updateStatusLoading ? "Loading..." : "Accept"}
+                    </button>
+                    <button
+                      onClick={() => handleUpdateStatus(row?._id, "rejected")}
+                      disabled={updateStatusLoading}
+                      className="w-16 h-8 bg-red-600  font-sans text-white  rounded-sm disabled:bg-slate-400"
+                    >
+                      {updateStatusLoading ? "Loading..." : "Reject"}
+                    </button>
+                  </>
                 ) : (
-                  <div className="w-16 h-8"></div>
+                  <>
+                    <div className="w-16 h-8"></div>
+                    <div className="w-16 h-8"></div>
+                  </>
                 )}
                 <button className="w-8 h-8 bg-gray-200 rounded-sm font-sans">
                   <svg

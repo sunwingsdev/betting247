@@ -117,7 +117,9 @@ const Deposit = () => {
       <h1 className="text-black mb-1">Deposit</h1>
       <div className="bg-white rounded-md p-3">
         <div className="bg-[#254c5d] p-1 rounded-md">
-          <h1 className="text-white text-center">1 PBU = 100 BDT</h1>
+          <h1 className="text-white text-center">
+            1 PBU = {conversionRate} BDT
+          </h1>
         </div>
         <form className="mt-4 flex flex-col gap-6" onSubmit={handleSubmit}>
           <div className="flex flex-col">

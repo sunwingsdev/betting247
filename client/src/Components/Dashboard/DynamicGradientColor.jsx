@@ -100,7 +100,7 @@ const DynamicGradientColor = ({ section, title }) => {
               onChange={(e) => setBackgroundColor(e.target.value)}
               placeholder="Enter background color (e.g., #ffffff, red)"
               className="w-full px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-yellow-600 disabled:cursor-not-allowed"
-              disabled={!isEditing} // Disable if not in edit mode
+              disabled={selectedColorControl && !isEditing} // Disable if not in edit mode
             />
             <input
               type="color"
@@ -108,7 +108,7 @@ const DynamicGradientColor = ({ section, title }) => {
               value={backgroundColor}
               onChange={(e) => setBackgroundColor(e.target.value)}
               className="w-12 h-8 p-1 border border-gray-300 rounded disabled:cursor-not-allowed"
-              disabled={!isEditing} // Disable if not in edit mode
+              disabled={selectedColorControl && !isEditing} // Disable if not in edit mode
             />
           </div>
         </div>
@@ -129,7 +129,7 @@ const DynamicGradientColor = ({ section, title }) => {
               onChange={(e) => setSecondBgColor(e.target.value)}
               placeholder="Enter text color (e.g., #000000, blue)"
               className="w-full px-3 py-1 border border-gray-300 focus:outline-none rounded focus:ring-1 focus:ring-yellow-600 disabled:cursor-not-allowed"
-              disabled={!isEditing} // Disable if not in edit mode
+              disabled={selectedColorControl && !isEditing} // Disable if not in edit mode
             />
             <input
               type="color"
@@ -137,7 +137,7 @@ const DynamicGradientColor = ({ section, title }) => {
               value={secondBgColor}
               onChange={(e) => setSecondBgColor(e.target.value)}
               className="w-12 h-8 p-1 border border-gray-300 rounded disabled:cursor-not-allowed"
-              disabled={!isEditing} // Disable if not in edit mode
+              disabled={selectedColorControl && !isEditing} // Disable if not in edit mode
             />
           </div>
         </div>
@@ -155,7 +155,7 @@ const DynamicGradientColor = ({ section, title }) => {
             value={direction}
             onChange={(e) => setDirection(e.target.value)}
             className="w-full px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-yellow-600 disabled:cursor-not-allowed"
-            disabled={!isEditing} // Disable if not in edit mode
+            disabled={selectedColorControl && !isEditing} // Disable if not in edit mode
           >
             <option value={"right"}>to right</option>
             <option value={"left"}>to left</option>
@@ -167,7 +167,9 @@ const DynamicGradientColor = ({ section, title }) => {
         {/* Submit Button (changes to Update Button in edit mode) */}
         <button
           type="submit"
-          disabled={isAdding || isUpdating}
+          disabled={
+            isAdding || isUpdating || (selectedColorControl && !isEditing)
+          }
           className="w-full px-4 py-1 text-black font-medium bg-yellow-500 rounded hover:bg-yellow-600 disabled:bg-gray-400"
         >
           {isEditing ? (isUpdating ? "Updating..." : "Update") : "Apply Styles"}

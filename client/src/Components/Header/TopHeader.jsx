@@ -70,17 +70,31 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
   ];
   const profileInformation = [
     { id: 1, name: "My Profile", path: "/myaccount#1" },
-    { id: 2, name: "Deposit", path: "/myaccount#2" },
-    { id: 3, name: "Withdraw", path: "/myaccount#3" },
-    { id: 4, name: "Balance Overview", path: "/myaccount#4" },
-    { id: 5, name: "Account Statement", path: "/myaccount#5" },
-    { id: 6, name: "My Bets", path: "/myaccount#5-1" },
+    {
+      id: 2,
+      name: "Deposit",
+      path: "/myaccount#2",
+      condition: user?.createdBy === "self",
+    },
+    {
+      id: 3,
+      name: "Withdraw",
+      path: "/myaccount#4",
+      condition: user?.createdBy === "self",
+    },
+    { id: 4, name: "Balance Overview", path: "/myaccount#6" },
+    { id: 5, name: "Account Statement", path: "/myaccount#8" },
+    { id: 6, name: "My Bets", path: "/myaccount#9" },
     { id: 7, name: "Bets History", path: "/myaccount#5-2" },
     { id: 8, name: "Profit Loss", path: "/myaccount#5-3" },
-    { id: 9, name: "Activity Log", path: "/myaccount#6" },
+    { id: 9, name: "Activity Log", path: "/myaccount#10" },
     { id: 10, name: "Check Sport Wise Result", path: "/result" },
     { id: 11, name: "Balance Transfer", path: "/balancetransfer" },
   ];
+
+  const filteredProfileInformation = profileInformation.filter(
+    (item) => item.condition === undefined || item.condition
+  );
 
   const [searchText, setSearchText] = useState("");
   const [myAccountOpen, setMyAccountOpen] = useState(false);
@@ -443,7 +457,7 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
                       </p>
                     </div>
                   </div>
-                  {profileInformation.map((item, index) => (
+                  {filteredProfileInformation.map((item, index) => (
                     <div
                       key={index}
                       className=" border-b border-sliderButtonMediumGray"

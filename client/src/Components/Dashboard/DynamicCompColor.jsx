@@ -100,7 +100,7 @@ const DynamicCompColor = ({ section, title }) => {
               onChange={(e) => setBackgroundColor(e.target.value)}
               placeholder="Enter background color (e.g., #ffffff, red)"
               className="w-full px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-yellow-600 disabled:cursor-not-allowed"
-              disabled={!isEditing} // Disable if not in edit mode
+              disabled={selectedColorControl && !isEditing}
             />
             <input
               type="color"
@@ -108,7 +108,7 @@ const DynamicCompColor = ({ section, title }) => {
               value={backgroundColor}
               onChange={(e) => setBackgroundColor(e.target.value)}
               className="w-12 h-8 p-1 border border-gray-300 rounded disabled:cursor-not-allowed"
-              disabled={!isEditing} // Disable if not in edit mode
+              disabled={selectedColorControl && !isEditing}
             />
           </div>
         </div>
@@ -129,7 +129,7 @@ const DynamicCompColor = ({ section, title }) => {
               onChange={(e) => setTextColor(e.target.value)}
               placeholder="Enter text color (e.g., #000000, blue)"
               className="w-full px-3 py-1 border border-gray-300 focus:outline-none rounded focus:ring-1 focus:ring-yellow-600 disabled:cursor-not-allowed"
-              disabled={!isEditing} // Disable if not in edit mode
+              disabled={selectedColorControl && !isEditing}
             />
             <input
               type="color"
@@ -137,7 +137,7 @@ const DynamicCompColor = ({ section, title }) => {
               value={textColor}
               onChange={(e) => setTextColor(e.target.value)}
               className="w-12 h-8 p-1 border border-gray-300 rounded disabled:cursor-not-allowed"
-              disabled={!isEditing} // Disable if not in edit mode
+              disabled={selectedColorControl && !isEditing}
             />
           </div>
         </div>
@@ -156,7 +156,7 @@ const DynamicCompColor = ({ section, title }) => {
             value={fontSize}
             onChange={(e) => setFontSize(Number(e.target.value))}
             className="w-full px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-yellow-600 disabled:cursor-not-allowed"
-            disabled={!isEditing} // Disable if not in edit mode
+            disabled={selectedColorControl && !isEditing}
           />
         </div>
 

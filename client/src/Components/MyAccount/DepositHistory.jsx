@@ -10,6 +10,11 @@ const DepositHistory = () => {
     (deposit) => deposit?.userId === user?._id
   );
 
+   const sortedDeposits = myDeposits?.slice().sort((a, b) => {
+      return moment(b.createdAt).diff(moment(a.createdAt));
+    });
+  
+
   if (isLoading) return <div className="text-center mt-4">Loading...</div>;
 
   return (
@@ -42,7 +47,7 @@ const DepositHistory = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {myDeposits?.map((row, index) => (
+          {sortedDeposits?.map((row, index) => (
             <tr key={index} className="text-center">
               <td className="border-b px-4 py-2 whitespace-nowrap text-sm text-gray-700">
                 {/* <button className="w-6 h-6 bg-green-500  font-sans text-white text-xs rounded-sm">
@@ -77,11 +82,11 @@ const DepositHistory = () => {
                           <circle cx="50" cy="50" r="40" fill="yellow" />
                         </svg>
                       </span>
-                      <span className="text-yellow-600 capitalize">
+                      <span className="text-yellow-800 capitalize">
                         {row?.status}
                       </span>
                     </>
-                  ) : (
+                  ) : row?.status === "approved" ? (
                     <>
                       <span className="text-green-800">
                         <svg
@@ -93,6 +98,21 @@ const DepositHistory = () => {
                         </svg>
                       </span>
                       <span className="text-green-800 capitalize">
+                        {row?.status}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-red-600">
+                        <svg
+                          className="w-3 h-3 "
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 100 100"
+                        >
+                          <circle cx="50" cy="50" r="40" fill="red" />
+                        </svg>
+                      </span>
+                      <span className="text-red-800 capitalize">
                         {row?.status}
                       </span>
                     </>

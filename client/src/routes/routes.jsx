@@ -23,7 +23,6 @@ import PrivateRoute from "./PrivateRoute";
 import DemoGame from "../Pages/DemoGame/DemoGame";
 import Banking from "../Pages/Dashboard/Banking/Banking";
 import HomeControl from "../Pages/Dashboard/HomeControl";
-import Banner from "../Pages/Banner";
 import Game from "../Pages/Dashboard/Game";
 import BetList from "../Pages/Dashboard/BetList";
 import BetListLive from "../Pages/Dashboard/BetListLive";
@@ -39,6 +38,7 @@ import DashboardDeposits from "../Pages/Dashboard/DashboardDeposits";
 import DashboardWithdraw from "../Pages/Dashboard/DashboardWithdraw";
 import ColorControl from "../Pages/Dashboard/ColorControl";
 import DepositMethod from "../Pages/Dashboard/DepositMethod";
+import Admin from "../Pages/Admin";
 
 const router = createBrowserRouter([
   {
@@ -115,7 +115,7 @@ const router = createBrowserRouter([
       { path: "depositmethod", element: <DepositMethod /> },
     ],
   },
-  { path: "/admin", element: <Banner /> },
+  { path: "/admin", element: <Admin /> },
   { path: "/accountsummary", element: <AccountSummary /> },
   { path: "/accounttabs", element: <AccountTabs /> },
   { path: "/accountstatementtabs", element: <AccountStatementTabs /> },

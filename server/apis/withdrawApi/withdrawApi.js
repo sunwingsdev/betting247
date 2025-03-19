@@ -62,11 +62,41 @@ const withdrawApi = (withdrawsCollection, usersCollection) => {
   //   update withdraw status
   router.patch("/update-status/:id", async (req, res) => {
     const { id } = req.params;
-    const result = await withdrawsCollection.updateOne(
-      { _id: new ObjectId(id) },
-      { $set: { status: "approved" } }
-    );
-    res.send(result);
+    const { status } = req.body;
+
+    try {
+      const withdraw = await withdrawsCollection.findOne({
+        _id: new ObjectId(id),
+      });
+      if (!withdraw) {
+        return res.status(404).send({ message: "Withdraw not found" });
+      }
+      if (withdraw.status !== "pending") {
+        return res.status(400).send({ message: "Withdraw is not pending" });
+      }
+      const user = await usersCollection.findOne({
+        _id: new ObjectId(withdraw.userId),
+      });
+
+      if (!user) {
+        return res.status(404).send({ message: "User not found" });
+      }
+      const result = await withdrawsCollection.findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: { status: status } },
+        { returnDocument: "after" }
+      );
+      if (status === "rejected") {
+        await usersCollection.updateOne(
+          { _id: new ObjectId(withdraw.userId) },
+          { $inc: { balance: withdraw.pbuAmount } }
+        );
+      }
+      res.send(result);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({ message: "Internal Server Error" });
+    }
   });
 
   return router;

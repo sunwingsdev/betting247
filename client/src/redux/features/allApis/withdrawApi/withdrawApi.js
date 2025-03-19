@@ -17,9 +17,10 @@ const withdrawApi = baseApi.injectEndpoints({
     }),
 
     updateWithdrawStatus: builder.mutation({
-      query: (id) => ({
+      query: ({ id, data }) => ({
         url: `/withdraws/update-status/${id}`,
         method: "PATCH",
+        body: data,
       }),
       invalidatesTags: ["withdraws"],
     }),

@@ -13,7 +13,7 @@ import { logout, setCredentials } from "@/redux/slices/authSlice";
 import toast from "react-hot-toast";
 import { useGetHomeControlsQuery } from "../redux/features/allApis/homeControlApi/homeControlApi";
 
-const Banner = () => {
+const Admin = () => {
   const { data: homeControls } = useGetHomeControlsQuery();
   const {
     register,
@@ -173,4 +173,4 @@ const Banner = () => {
   );
 };
 
-export default Banner;
+export default Admin;

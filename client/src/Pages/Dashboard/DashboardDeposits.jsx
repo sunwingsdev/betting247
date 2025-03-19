@@ -29,6 +29,11 @@ const DashboardDeposits = () => {
 
   if (isLoading) return <div className="text-center mt-4">Loading...</div>;
 
+  // Sort deposits by createdAt in descending order
+  const sortedDeposits = deposits?.slice().sort((a, b) => {
+    return moment(b.createdAt).diff(moment(a.createdAt));
+  });
+
   return (
     <div className="overflow-x-auto ">
       <table className="min-w-full divide-y divide-gray-300">
@@ -67,12 +72,9 @@ const DashboardDeposits = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {deposits?.map((row, index) => (
+          {sortedDeposits?.map((row, index) => (
             <tr key={index} className="text-center">
               <td className="border-b px-2 py-1 whitespace-nowrap text-sm text-gray-700">
-                {/* <button className="w-6 h-6 bg-green-500  font-sans text-white text-xs rounded-sm">
-                  AD
-                </button> */}
                 <span className="text-blue-500 pl-2">{row.channel}</span>
               </td>
               <td className="capitalize border-b px-2 py-1 whitespace-nowrap text-sm text-gray-700">

@@ -67,6 +67,9 @@ const Withdraw = () => {
   return (
     <div className="w-full md:w-4/5">
       <h1 className="text-black mb-1">Withdraw</h1>
+      <div className="bg-[#254c5d] p-1 rounded-md">
+        <h1 className="text-white text-center">1 PBU = {conversionRate} BDT</h1>
+      </div>
       <div className="bg-white rounded-md p-3">
         <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-6">
           {/* PBU Amount */}
