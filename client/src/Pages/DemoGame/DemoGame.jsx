@@ -6,7 +6,7 @@ const DemoGame = () => {
 
   const { data: games, isLoading } = useGetGamesQuery();
 
-  const game = games.find((game) => game._id === id);
+  const game = games?.find((game) => game._id === id);
 
   if (isLoading) {
     return <div>Loading...</div>;

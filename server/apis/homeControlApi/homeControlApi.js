@@ -55,6 +55,15 @@ const homeControlApi = (homeControlCollection) => {
           { _id: new ObjectId(id) },
           { $set: { isSelected: true } }
         );
+      } else if (category === "title") {
+        await homeControlCollection.updateMany(
+          { category: "title" },
+          { $set: { isSelected: false } }
+        );
+        await homeControlCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: { isSelected: true } }
+        );
       } else if (
         category === "slider" ||
         category === "favorite" ||
