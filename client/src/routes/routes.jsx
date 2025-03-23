@@ -39,6 +39,7 @@ import DashboardWithdraw from "../Pages/Dashboard/DashboardWithdraw";
 import ColorControl from "../Pages/Dashboard/ColorControl";
 import DepositMethod from "../Pages/Dashboard/DepositMethod";
 import Admin from "../Pages/Admin";
+import MotherAdminRoute from "./MotherAdminRoute";
 
 const router = createBrowserRouter([
   {
@@ -96,23 +97,86 @@ const router = createBrowserRouter([
     ),
     children: [
       { path: "", element: <AdminDashboard /> },
-      { path: "generalsetting", element: <Setting /> },
-      { path: "adminsetting", element: <AdminSetting /> },
-      { path: "gameapi", element: <Game /> },
-      { path: "homecontrol", element: <HomeControl /> },
-      { path: "colorcontrol", element: <ColorControl /> },
-      { path: "addgame", element: <AddGame /> },
+      {
+        path: "generalsetting",
+        element: (
+          <MotherAdminRoute>
+            <Setting />
+          </MotherAdminRoute>
+        ),
+      },
+      {
+        path: "adminsetting",
+        element: (
+          <MotherAdminRoute>
+            <AdminSetting />
+          </MotherAdminRoute>
+        ),
+      },
+      {
+        path: "gameapi",
+        element: (
+          <MotherAdminRoute>
+            <Game />
+          </MotherAdminRoute>
+        ),
+      },
+      {
+        path: "homecontrol",
+        element: (
+          <MotherAdminRoute>
+            <HomeControl />
+          </MotherAdminRoute>
+        ),
+      },
+      {
+        path: "colorcontrol",
+        element: (
+          <MotherAdminRoute>
+            <ColorControl />
+          </MotherAdminRoute>
+        ),
+      },
+      {
+        path: "addgame",
+        element: (
+          <MotherAdminRoute>
+            <AddGame />
+          </MotherAdminRoute>
+        ),
+      },
       { path: "myaccount", element: <MyAccount /> },
       { path: "betlist", element: <BetList /> },
       { path: "betlive", element: <BetListLive /> },
       { path: "banking", element: <Banking /> },
       { path: "activegame", element: <ActiveGame /> },
       { path: "deactivegame", element: <DeactiveGame /> },
-      { path: "livegame", element: <LiveGame /> },
+      {
+        path: "livegame",
+        element: (
+          <MotherAdminRoute>
+            <LiveGame />
+          </MotherAdminRoute>
+        ),
+      },
       { path: "usersdata/:role", element: <UsersData /> },
       { path: "deposits", element: <DashboardDeposits /> },
-      { path: "withdraws", element: <DashboardWithdraw /> },
-      { path: "depositmethod", element: <DepositMethod /> },
+      {
+        path: "withdraws",
+        element: (
+          <MotherAdminRoute>
+            <DashboardWithdraw />
+          </MotherAdminRoute>
+        ),
+      },
+      {
+        path: "depositmethod",
+        element: (
+          <MotherAdminRoute>
+            <DepositMethod />
+          </MotherAdminRoute>
+        ),
+      },
     ],
   },
   { path: "/admin", element: <Admin /> },

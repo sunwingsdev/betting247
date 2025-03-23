@@ -7,43 +7,54 @@ import {
 import moment from "moment";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { useGetDepositsQuery } from "../../redux/features/allApis/depositsApi/depositsApi";
+import { useGetWithdrawsQuery } from "../../redux/features/allApis/withdrawApi/withdrawApi";
 
 const rolesOptions = [
   {
     label: "User",
     value: "user",
-    roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+    roles: [
+      "sub-agent",
+      "agent",
+      "master",
+      "sub-admin",
+      "admin",
+      "mother-admin",
+    ],
   },
   {
     label: "Sub Agent",
     value: "sub-agent",
-    roles: ["agent", "master", "sub-admin", "admin"],
+    roles: ["agent", "master", "sub-admin", "admin", "mother-admin"],
   },
   {
     label: "Agent",
     value: "agent",
-    roles: ["master", "sub-admin", "admin"],
+    roles: ["master", "sub-admin", "admin", "mother-admin"],
   },
   {
     label: "Master",
     value: "master",
-    roles: ["sub-admin", "admin"],
+    roles: ["sub-admin", "admin", "mother-admin"],
   },
   {
     label: "Sub Admin",
     value: "sub-admin",
-    roles: ["admin"],
+    roles: ["admin", "mother-admin"],
   },
   {
     label: "Admin",
     value: "admin",
-    roles: ["admin"],
+    roles: ["mother-admin"],
   },
 ];
 
 const AdminDashboard = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { user, singleUser } = useSelector((state) => state.auth);
   const { data: users } = useGetUsersQuery();
+  const { data: deposits } = useGetDepositsQuery();
+  const { data: withdraws } = useGetWithdrawsQuery();
   const [addUser, { isLoading }] = useAddUserMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {
@@ -67,6 +78,24 @@ const AdminDashboard = () => {
     0
   );
 
+  const approvedDeposits = deposits?.filter(
+    (deposit) => deposit.status === "approved"
+  );
+
+  const approvedDepositsAmount = approvedDeposits?.reduce(
+    (sum, deposit) => sum + deposit.pbuAmount,
+    0
+  );
+
+  const approvedWithdraws = withdraws?.filter(
+    (withdraw) => withdraw.status === "approved"
+  );
+
+  const approvedWithdrawsAmount = approvedWithdraws?.reduce(
+    (sum, withdraw) => sum + withdraw.pbuAmount,
+    0
+  );
+
   const onSubmit = async (data) => {
     // eslint-disable-next-line no-unused-vars
     const { confirmPassword, ...userInfo } = data;
@@ -84,6 +113,36 @@ const AdminDashboard = () => {
       });
     }
   };
+
+  const tabs = [
+    {
+      label: "Total Balance",
+      value: `PBU (${totalBalance?.toFixed(2) || "0.00"})`,
+    },
+    {
+      label: "Remaining Balance",
+      value: `PBU (${singleUser?.balance?.toFixed(2) || "0.00"})`,
+    },
+    user?.role === "mother-admin"
+      ? {
+          label: "Total Self Deposit",
+          value: `PBU (${approvedDepositsAmount?.toFixed(2) || "0.00"})`,
+        }
+      : {
+          label: "Total Agent Balance",
+          value: "USD (0.00)",
+        },
+    { label: "Total Exposure", value: "USD (0.00)" },
+    user?.role === "mother-admin"
+      ? {
+          label: "Total Self Withdrawal",
+          value: `PBU (${approvedWithdrawsAmount?.toFixed(2) || "0.00"})`,
+        }
+      : {
+          label: "Total Admin",
+          value: "USD (0.00)",
+        },
+  ];
 
   return (
     <div className="px-4 py-2">
@@ -176,13 +235,7 @@ const AdminDashboard = () => {
       </div>
       <div className="py-2">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {[
-            { label: "Total Balance", value: `(${totalBalance || "0.00"})` },
-            { label: "Remaining Balance", value: "USD(0.00)" },
-            { label: "Total Agent Balance", value: "USD(0.00)" },
-            { label: "Total Exposure", value: "USD(0.00)" },
-            { label: "Total Admin", value: "USD(0.00)" },
-          ].map((item, index) => (
+          {tabs?.map((item, index) => (
             <div
               key={index}
               className="space-y-1 p-4 border border-black border-opacity-10 text-white bg-black text-center rounded-md"

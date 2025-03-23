@@ -30,32 +30,39 @@ function HeadingNavbar() {
         {
           label: "User",
           path: "usersdata/user",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          roles: [
+            "sub-agent",
+            "agent",
+            "master",
+            "sub-admin",
+            "admin",
+            "mother-admin",
+          ],
         },
         {
           label: "Sub Agent",
           path: "usersdata/sub-agent",
-          roles: ["agent", "master", "sub-admin", "admin"],
+          roles: ["agent", "master", "sub-admin", "admin", "mother-admin"],
         },
         {
           label: "Agent",
           path: "usersdata/agent",
-          roles: ["master", "admin", "sub-admin"],
+          roles: ["master", "admin", "sub-admin", "mother-admin"],
         },
         {
           label: "Master",
           path: "usersdata/master",
-          roles: ["admin", "sub-admin"],
+          roles: ["admin", "sub-admin", "mother-admin"],
         },
         {
           label: "Sub Admin",
           path: "usersdata/subadmin",
-          roles: ["admin"],
+          roles: ["admin", "mother-admin"],
         },
         {
           label: "Admin",
           path: "usersdata/admin",
-          roles: ["admin"],
+          roles: ["mother-admin"],
         },
       ],
     },
@@ -66,37 +73,37 @@ function HeadingNavbar() {
         {
           label: "General Setting",
           path: "/admindashboard/generalsetting",
-          roles: ["admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "Admin Setting",
           path: "/admindashboard/adminsetting",
-          roles: ["admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "Game Api Key",
           path: "/admindashboard/gameapi",
-          roles: ["admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "Home Control",
           path: "/admindashboard/homecontrol",
-          roles: ["admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "Color Control",
           path: "/admindashboard/colorcontrol",
-          roles: ["admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "Add Game Api Key",
           path: "/admindashboard/addgame",
-          roles: ["admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "Add Deposit Method",
           path: "/admindashboard/depositmethod",
-          roles: ["admin"],
+          roles: ["mother-admin"],
         },
       ],
     },
@@ -123,53 +130,53 @@ function HeadingNavbar() {
         {
           label: "Pragmatic Play",
           path: "#pragmatic-play",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "Evolution",
           path: "#evolution",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "BGaming",
           path: "#bgaming",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "Amusnet",
           path: "#amusnet",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "PG Soft",
           path: "#pg-soft",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "Play and GO",
           path: "#play-and-go",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "Playtech",
           path: "#playtech",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "Nolimit City",
           path: "#nolimit-city",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "Hacksaw",
           path: "#hacksaw",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          roles: ["mother-admin"],
         },
       ],
     },
     {
-      label: "MM",
-      path: "#MM",
+      label: "Risk Management",
+      path: "#",
     },
     {
       label: "Import",
@@ -177,13 +184,13 @@ function HeadingNavbar() {
       subItems: [
         {
           label: "Game file Import",
-          path: "/admindashboard/gamefileimport",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          path: "#",
+          roles: ["mother-admin"],
         },
         {
           label: "Api file import",
-          path: "/admindashboard/apifileformat",
-          roles: ["sub-agent", "agent", "master", "sub-admin", "admin"],
+          path: "#",
+          roles: ["mother-admin"],
         },
       ],
     },
@@ -198,17 +205,31 @@ function HeadingNavbar() {
         {
           label: "Active Game",
           path: "/admindashboard/activegame",
-          roles: ["admin"],
+          roles: [
+            "sub-agent",
+            "agent",
+            "master",
+            "sub-admin",
+            "admin",
+            "mother-admin",
+          ],
         },
         {
           label: "Deactive Game",
           path: "/admindashboard/deactivegame",
-          roles: ["admin"],
+          roles: [
+            "sub-agent",
+            "agent",
+            "master",
+            "sub-admin",
+            "admin",
+            "mother-admin",
+          ],
         },
         {
           label: "Live Game",
           path: "/admindashboard/livegame",
-          roles: ["admin"],
+          roles: ["mother-admin"],
         },
       ],
     },
@@ -220,13 +241,13 @@ function HeadingNavbar() {
           label: "Deposits",
           path: "/admindashboard/deposits",
           pending: pendingDeposits?.length,
-          roles: ["admin"],
+          roles: ["mother-admin"],
         },
         {
           label: "Withdraws",
           path: "/admindashboard/withdraws",
           pending: pendingWithdraws?.length,
-          roles: ["admin"],
+          roles: ["mother-admin"],
         },
       ],
     },
@@ -238,15 +259,15 @@ function HeadingNavbar() {
   const allowedMenuForOthers = [
     "Dashboard",
     "User",
-    "Setting",
     "My Account",
     "BetList",
     "BetListLive",
     "Banking",
+    "Game Center",
   ];
 
   const filteredMenuItems = menuItems.filter((item) => {
-    if (user?.role === "admin") return true;
+    if (user?.role === "mother-admin") return true;
     return allowedMenuForOthers.includes(item.label);
   });
 

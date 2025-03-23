@@ -1,26 +1,15 @@
-import {
-  useLazyGetUserByIdQuery,
-  useUpdateBalanceMutation,
-} from "@/redux/features/allApis/usersApi/usersApi";
-import { setSingleUser } from "@/redux/slices/authSlice";
+import { useUpdateBalanceMutation } from "@/redux/features/allApis/usersApi/usersApi";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { useFetchUser } from "../../../hooks/customHook";
 
 const Transaction = ({ userId, availableBalance = 0 }) => {
   const { user, singleUser } = useSelector((state) => state.auth);
+  const { fetchUser } = useFetchUser(user?._id);
   const [updateBalance] = useUpdateBalanceMutation();
-  const [getSingleUser] = useLazyGetUserByIdQuery();
   const [action, setAction] = useState("");
   const [amount, setAmount] = useState("");
-  const dispatch = useDispatch();
-
-  const reloadBalance = () => {
-    if (!user) return;
-    getSingleUser(user?._id).then(({ data }) => {
-      dispatch(setSingleUser(data)); // Update Redux store with the latest balance
-    });
-  };
 
   const handleTransaction = async () => {
     if (!action) {
@@ -57,7 +46,7 @@ const Transaction = ({ userId, availableBalance = 0 }) => {
       toast.success(
         action === "deposit" ? "Deposit successful" : "Withdrawal successful"
       );
-      reloadBalance();
+      fetchUser();
       setAmount("");
       setAction("");
     }

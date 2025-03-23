@@ -46,6 +46,15 @@ const homeControlApi = (homeControlCollection) => {
           { _id: new ObjectId(id) },
           { $set: { isSelected: true } }
         );
+      } else if (category === "login-image") {
+        await homeControlCollection.updateMany(
+          { category: "login-image" },
+          { $set: { isSelected: false } }
+        );
+        await homeControlCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: { isSelected: true } }
+        );
       } else if (category === "notice") {
         await homeControlCollection.updateMany(
           { category: "notice" },

@@ -1,39 +1,21 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, setSingleUser } from "@/redux/slices/authSlice";
-import { useLazyGetUserByIdQuery } from "@/redux/features/allApis/usersApi/usersApi";
-import { useEffect } from "react";
+import { logout } from "@/redux/slices/authSlice";
 import HeadingNavbar from "./HeadingNavbar";
 import toast from "react-hot-toast";
 import { useGetHomeControlsQuery } from "../../redux/features/allApis/homeControlApi/homeControlApi";
+import { useFetchUser } from "../../hooks/customHook";
 
 const CommonNavMenu = () => {
   const { data: homeControls } = useGetHomeControlsQuery();
   const { user, singleUser } = useSelector((state) => state.auth);
-  const [getSingleUser] = useLazyGetUserByIdQuery(user?._id, {
-    skip: !user,
-  });
+  const { fetchUser } = useFetchUser(user?._id);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const control = homeControls?.find(
     (control) => control.category === "logo" && control.isSelected
   );
-
-  // Fetch user balance on component mount
-  useEffect(() => {
-    if (!user) return;
-    getSingleUser(user?._id).then(({ data }) => {
-      dispatch(setSingleUser(data));
-    });
-  }, [user, dispatch, getSingleUser]);
-
-  const reloadBalance = () => {
-    if (!user) return;
-    getSingleUser(user?._id).then(({ data }) => {
-      dispatch(setSingleUser(data));
-    });
-  };
 
   const handleLogout = () => {
     dispatch(logout());
@@ -61,11 +43,11 @@ const CommonNavMenu = () => {
                 - Main Balance:
               </span>{" "}
               <span className="text-gray-100 text-xs">
-                {singleUser?.balance} PBU{" "}
+                {singleUser?.balance || 0} PBU{" "}
               </span>{" "}
             </p>
             <button
-              onClick={reloadBalance}
+              onClick={() => fetchUser()}
               className="pl-1 mt-2 size-7 bg-gray-900 hover:bg-gray-300"
             >
               <svg

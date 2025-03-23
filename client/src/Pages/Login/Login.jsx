@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import loginImage from "../../assets/login.png";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import bkashImage from "../../assets/bkash.jpg";
 import nogodImage from "../../assets/nogod.jpg";
@@ -26,8 +25,11 @@ const Login = () => {
   const [validationCode, setValidationCode] = useState(generateRandomCode());
   const [enteredValidationCode, setEnteredValidationCode] = useState(""); // State for entered validation code
 
-  const control = homeControls?.find(
+  const logoControl = homeControls?.find(
     (control) => control.category === "logo" && control.isSelected
+  );
+  const loginImageControl = homeControls?.find(
+    (control) => control.category === "login-image" && control.isSelected
   );
   function generateRandomCode() {
     return Math.floor(1000 + Math.random() * 9000).toString();
@@ -73,13 +75,15 @@ const Login = () => {
     <div className="flex flex-col bg-commonYellowColor h-screen">
       <div className="relative">
         <img
-          src={loginImage}
+          src={`${import.meta.env.VITE_BASE_API_URL}${
+            loginImageControl?.image
+          }`}
           alt=""
           className=" w-full object-cover  clip-top-utilities   "
         />
         <img
           className="absolute top-10 left-1/2 transform -translate-x-1/2 w-1/2"
-          src={`${import.meta.env.VITE_BASE_API_URL}${control?.image}`}
+          src={`${import.meta.env.VITE_BASE_API_URL}${logoControl?.image}`}
           alt=""
         />
         <span

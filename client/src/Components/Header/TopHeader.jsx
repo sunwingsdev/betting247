@@ -131,7 +131,7 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
           autoDismiss: true,
         });
         resetValidationCode();
-        if (userData?.role !== "admin") {
+        if (userData?.role !== "mother-admin") {
           navigate("/");
         } else {
           navigate("/admindashboard");
@@ -198,7 +198,7 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
           headingColorControl?.secondBackgroundColor || "#000000"
         })`,
       }}
-      className=" py-3 px-2   flex flex-row gap-2 items-center justify-between"
+      className="px-1 py-1 md:py-3 md:px-2   md:flex flex-row gap-2 items-center justify-between"
     >
       <div className="flex flex-row items-center justify-between w-full lg:w-auto gap-2">
         {/* Logo */}
@@ -206,7 +206,7 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
           <img
             src={`${import.meta.env.VITE_BASE_API_URL}${control?.image}`}
             alt=""
-            className="w-full max-w-[100px] lg:max-w-[150px]"
+            className="hidden md:block w-full max-w-[100px] lg:max-w-[150px]"
           />
         </Link>
         <div className="flex items-center justify-center gap-3">
@@ -375,16 +375,16 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
         </>
       ) : (
         <>
-          <div className="flex flex-row items-center justify-center  gap-1 lg:gap-2 relative">
+          <div className="flex flex-row items-center justify-center gap-1 lg:gap-2 relative">
             <div className="lg:hidden flex flex-row   text-customWhite bg-signUpColor  rounded-[4px]  p-1  items-center ">
               <span>
-                <CiDollar className="w-5 h-auto stroke-1" />
+                <CiDollar className="w-5  h-auto stroke-1" />
               </span>
 
               <h3 className="text-xs text-textYellowColor">Bet</h3>
             </div>
             <div className="flex flex-row items-center font-medium rounded-[4px]  bg-signUpColor lg:bg-none whitespace-nowrap text-[10px] lg:text-xs lg:border border-sliderButtonMediumGray text-textYellowColor  lg:text-customWhite relative">
-              <div className="flex flex-row items-center lg:py-1 hover:underline cursor-pointer  px-2   gap-2">
+              <div className="flex flex-row items-center md:py-1 hover:underline cursor-pointer  px-2 gap-0.5  md:gap-2">
                 <h3 className="">
                   Main{" "}
                   <span className="font-bold ">
