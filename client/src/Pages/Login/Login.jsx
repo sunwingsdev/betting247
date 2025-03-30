@@ -79,10 +79,10 @@ const Login = () => {
             loginImageControl?.image
           }`}
           alt=""
-          className=" w-full object-cover  clip-top-utilities   "
+          className=" w-full object-cover"
         />
         <img
-          className="absolute top-10 left-1/2 transform -translate-x-1/2 w-1/2"
+          className="absolute top-16 left-1/2 transform -translate-x-1/2 w-1/2"
           src={`${import.meta.env.VITE_BASE_API_URL}${logoControl?.image}`}
           alt=""
         />

@@ -205,26 +205,12 @@ function HeadingNavbar() {
         {
           label: "Active Game",
           path: "/admindashboard/activegame",
-          roles: [
-            "sub-agent",
-            "agent",
-            "master",
-            "sub-admin",
-            "admin",
-            "mother-admin",
-          ],
+          roles: ["mother-admin"],
         },
         {
           label: "Deactive Game",
           path: "/admindashboard/deactivegame",
-          roles: [
-            "sub-agent",
-            "agent",
-            "master",
-            "sub-admin",
-            "admin",
-            "mother-admin",
-          ],
+          roles: ["mother-admin"],
         },
         {
           label: "Live Game",

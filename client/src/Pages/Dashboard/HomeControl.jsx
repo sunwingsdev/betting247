@@ -8,6 +8,8 @@ import TitleUploadSection from "../../Components/Dashboard/TitleUploadSection";
 import TitleSelectionSection from "../../Components/Dashboard/TitleSelectionSection";
 import LoginImageUploadSection from "../../Components/Dashboard/LoginImageUploadSection";
 import LoginImageSelectionSection from "../../Components/Dashboard/LoginImageSelectionSection";
+import MotherAdminImgUploadSection from "../../Components/Dashboard/MotherAdminImgUploadSection";
+import MotherAdminImgSelection from "../../Components/Dashboard/MotherAdminImgSelection";
 
 const HomeControl = () => {
   return (
@@ -26,6 +28,8 @@ const HomeControl = () => {
         <TitleSelectionSection />
         <LoginImageUploadSection />
         <LoginImageSelectionSection />
+        <MotherAdminImgUploadSection />
+        <MotherAdminImgSelection />
       </div>
     </div>
   );

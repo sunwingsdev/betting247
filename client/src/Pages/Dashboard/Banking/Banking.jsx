@@ -12,8 +12,16 @@ const Banking = () => {
   const { user, singleUser } = useSelector((state) => state.auth);
   const { data: users } = useGetUsersQuery();
   const [amount, setAmount] = useState(0);
-
   const { fetchUser } = useFetchUser(user?._id);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredUsers = (
+    user?.role === "mother-admin"
+      ? users?.filter((selectedUser) => selectedUser?._id !== user?._id)
+      : users?.filter((selectedUser) => selectedUser?.createdBy === user?._id)
+  )?.filter((user) =>
+    user?.username?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const roleHierarchy = {
     "mother-admin": [
@@ -31,10 +39,10 @@ const Banking = () => {
     "sub-agent": ["user"],
   };
 
-  const filteredUsers =
-    user?.role === "mother-admin"
-      ? users?.filter((selectedUser) => selectedUser?._id !== user?._id)
-      : users?.filter((selectedUser) => selectedUser?.createdBy === user?._id);
+  // const filteredUsers =
+  //   user?.role === "mother-admin"
+  //     ? users?.filter((selectedUser) => selectedUser?._id !== user?._id)
+  //     : users?.filter((selectedUser) => selectedUser?.createdBy === user?._id);
 
   const roleUsers = users?.filter((user) => user.role === "user");
   const roleSubAgents = users?.filter((user) => user.role === "sub-agent");
@@ -142,16 +150,15 @@ const Banking = () => {
           </div>
         )}
       </div>
-
-      <input
-        className="border border-black p-2 rounded-sm mx-2 my-2 w-40 h-6 placeholder:text-xs"
-        type="search"
-        placeholder="Enter User"
-      />
-
-      <h3 className="w-44 h-6 border bg-headingTextColor border-black mx-2 text-white pl-1">
-        Credit Reference
-      </h3>
+      <div className="flex items-center justify-end">
+        <input
+          className="border border-black px-3 py-1 rounded "
+          type="text"
+          placeholder="Enter Username"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
 
       <div className="overflow-x-auto pt-4">
         <table className="min-w-full divide-y divide-gray-300">
@@ -171,7 +178,7 @@ const Banking = () => {
               ].map((header, index) => (
                 <th
                   key={index}
-                  className="border bg-yellow-400 border-gray-300 px-4 py-2 text-left text-sm font-medium uppercase"
+                  className="border bg-yellow-400 border-black px-4 py-2 text-left text-sm font-medium uppercase"
                 >
                   {header}
                 </th>
@@ -184,40 +191,40 @@ const Banking = () => {
                 .filter((row) => roleHierarchy[user.role]?.includes(row.role))
                 .map((row, index) => (
                   <tr key={index}>
-                    <td className="border-b px-4 py-2 text-sm text-gray-700">
+                    <td className="border border-black px-4 py-2 text-sm text-gray-700">
                       <span className="text-blue-500 pl-2">
                         {row?.username}
                       </span>
                     </td>
-                    <td className="border-b px-4 py-2 text-sm text-gray-700">
+                    <td className="border border-black px-4 py-2 text-sm text-gray-700">
                       {row?.role || ""}
                     </td>
-                    <td className="border-b px-4 py-2 text-sm text-gray-700">
+                    <td className="border border-black px-4 py-2 text-sm text-gray-700">
                       {row?.balance || 0}
                     </td>
-                    <td className="border-b px-4 py-2 text-sm text-red-700">
+                    <td className="border border-black px-4 py-2 text-sm text-red-700">
                       {row?.exposure}
                     </td>
-                    <td className="border-b px-4 py-2 text-sm text-gray-700">
+                    <td className="border border-black px-4 py-2 text-sm text-gray-700">
                       {row?.exposure}
                     </td>
-                    <td className="border-b px-4 py-2 text-sm text-gray-700">
+                    <td className="border border-black px-4 py-2 text-sm text-gray-700">
                       <Transaction
                         parentId={user?._id}
                         userId={row?._id}
                         availableBalance={row?.balance}
                       />
                     </td>
-                    <td className="border-b px-4 py-2 text-sm text-gray-700">
+                    <td className="border border-black px-4 py-2 text-sm text-gray-700">
                       {row?.playerBalance}
                     </td>
-                    <td className="border-b px-4 py-2 text-sm text-gray-700">
+                    <td className="border border-black px-4 py-2 text-sm text-gray-700">
                       {row?.refPL}
                     </td>
-                    <td className="px-4 py-2 text-sm text-gray-700 flex items-center justify-center gap-2">
+                    <td className="border border-black px-4 py-2 text-sm text-gray-700 text-center">
                       <Remark user={row} />
                     </td>
-                    <td className="border-b px-4 py-2 text-sm text-gray-700">
+                    <td className="border border-black px-4 py-2 text-sm text-gray-700">
                       <button className="w-10 h-8 bg-blue-500 text-white rounded-sm">
                         Login
                       </button>
@@ -226,7 +233,10 @@ const Banking = () => {
                 ))
             ) : (
               <tr>
-                <td colSpan="9" className="text-center py-4 text-gray-500">
+                <td
+                  colSpan="9"
+                  className="border border-black text-center py-4 text-gray-500"
+                >
                   No data available
                 </td>
               </tr>

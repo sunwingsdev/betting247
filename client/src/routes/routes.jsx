@@ -40,6 +40,11 @@ import ColorControl from "../Pages/Dashboard/ColorControl";
 import DepositMethod from "../Pages/Dashboard/DepositMethod";
 import Admin from "../Pages/Admin";
 import MotherAdminRoute from "./MotherAdminRoute";
+import AgentLogin from "../Pages/AgentLogin";
+import SubAgentLogin from "../Pages/SubAgentLogin";
+import MasterLogin from "../Pages/MasterLogin";
+import SubAdminLogin from "../Pages/SubAdminLogin";
+import MotherAdminLogin from "../Pages/MotherAdminLogin";
 
 const router = createBrowserRouter([
   {
@@ -179,7 +184,12 @@ const router = createBrowserRouter([
       },
     ],
   },
+  { path: "/motheradmin", element: <MotherAdminLogin /> },
   { path: "/admin", element: <Admin /> },
+  { path: "/subadmin", element: <SubAdminLogin /> },
+  { path: "/master", element: <MasterLogin /> },
+  { path: "/agent", element: <AgentLogin /> },
+  { path: "/subagent", element: <SubAgentLogin /> },
   { path: "/accountsummary", element: <AccountSummary /> },
   { path: "/accounttabs", element: <AccountTabs /> },
   { path: "/accountstatementtabs", element: <AccountStatementTabs /> },
