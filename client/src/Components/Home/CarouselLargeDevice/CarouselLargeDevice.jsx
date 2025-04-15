@@ -15,6 +15,7 @@ const CarouselLargeDevice = () => {
     (colorControl) => colorControl?.section === "home-game-button"
   );
 
+
   const handlePlay = (id, link) => {
     if (link) {
       navigate(`/games/demo/${id}`);
