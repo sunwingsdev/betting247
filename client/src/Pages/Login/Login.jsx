@@ -50,17 +50,26 @@ const Login = () => {
 
       if (loginData.token) {
         const { data: userData } = await getUser(loginData.token);
+        if (
+          userData?.status === "banned" ||
+          userData?.status === "deactivated" ||
+          userData?.status === null ||
+          userData?.status === undefined
+        ) {
+          toast.error("Your account is deactivated or banned");
+          return;
+        }
+        if (userData?.role !== "user") {
+          toast.error("You are not allowed to login");
+          return;
+        }
         dispatch(setCredentials({ token: loginData.token, user: userData }));
         toast.success("Login successful", {
           appearance: "success",
           autoDismiss: true,
         });
         resetValidationCode();
-        if (userData?.role !== "admin") {
-          navigate("/");
-        } else {
-          navigate("/admindashboard");
-        }
+        navigate("/");
       }
       // eslint-disable-next-line no-unused-vars
     } catch (error) {

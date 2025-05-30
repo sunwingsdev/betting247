@@ -10,23 +10,41 @@ const usersApi = (usersCollection) => {
   // Middleware to validate JWT tokens
   const authenticateToken = (req, res, next) => {
     const authHeader = req.header("Authorization");
-    if (!authHeader)
+    if (!authHeader) {
       return res
         .status(401)
         .json({ error: "Access denied. No token provided." });
+    }
 
-    const token = authHeader.split(" ")[1];
-    if (!token)
+    // Check if header has 'Bearer ' prefix
+    if (!authHeader.startsWith("Bearer ")) {
       return res
         .status(401)
         .json({ error: "Access denied. Invalid token format." });
+    }
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      return res
+        .status(401)
+        .json({ error: "Access denied. Invalid token format." });
+    }
 
     try {
-      const decoded = jwt.verify(token, jwtSecret);
+      console.log("Token received:", token);
+      console.log("JWT Secret used:", jwtSecret);
+
+      const decoded = jwt.verify(token, jwtSecret, { algorithms: ["HS256"] }); // specify algorithm if needed
+      console.log("Decoded token:", decoded);
+
       req.user = decoded;
       next();
     } catch (error) {
-      return res.status(403).json({ error: "Invalid or expired token." });
+      console.error("Token verification error:", error.message);
+      if (error.name === "TokenExpiredError") {
+        return res.status(403).json({ error: "Token expired." });
+      }
+      return res.status(403).json({ error: "Invalid token." });
     }
   };
 
@@ -57,7 +75,6 @@ const usersApi = (usersCollection) => {
   // Login a user and validate JWT issuance
   router.post("/login", async (req, res) => {
     const { username, password } = req.body;
-
     if (!username || !password) {
       return res
         .status(400)
@@ -202,6 +219,22 @@ const usersApi = (usersCollection) => {
     const updatedDoc = {
       $inc: {
         balance: balanceInfo.amount,
+      },
+    };
+    const result = await usersCollection.updateOne(query, updatedDoc, {
+      upsert: true,
+    });
+    res.send(result);
+  });
+
+  // update user active status
+  router.put("/active-status/:id", async (req, res) => {
+    const { id } = req.params;
+    const statusInfo = req.body;
+    const query = { _id: new ObjectId(id) };
+    const updatedDoc = {
+      $set: {
+        status: statusInfo.status,
       },
     };
     const result = await usersCollection.updateOne(query, updatedDoc, {

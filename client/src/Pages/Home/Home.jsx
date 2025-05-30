@@ -2,12 +2,9 @@ import ImageSlider from "../../Components/ImageSlider/ImageSlider";
 import Marquee from "../../Components/Marquee/Marquee";
 import CarouselLargeDevice from "../../Components/Home/CarouselLargeDevice/CarouselLargeDevice";
 import { useSelector } from "react-redux";
-import { Helmet } from "react-helmet-async";
-import favIcon from "/logo.svg";
 
 const Home = () => {
   const { user } = useSelector((state) => state.auth);
-  const websiteName = "9Tenbet";
   return (
     <div className="bg-inPlayBgColor">
       {/* <Helmet>

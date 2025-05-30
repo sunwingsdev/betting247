@@ -125,11 +125,17 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
 
       if (loginData.token) {
         const { data: userData } = await getUser(loginData.token);
+        if (
+          userData?.status === "banned" ||
+          userData?.status === "deactivated" ||
+          userData?.status === null ||
+          userData?.status === undefined
+        ) {
+          toast.error("Your account is deactivated or banned");
+          return;
+        }
         dispatch(setCredentials({ token: loginData.token, user: userData }));
-        toast.success("Login successful", {
-          appearance: "success",
-          autoDismiss: true,
-        });
+        toast.success("Login successful");
         resetValidationCode();
         if (userData?.role !== "mother-admin") {
           navigate("/");

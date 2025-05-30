@@ -79,6 +79,15 @@ const usersApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["users"],
     }),
+
+    updateActiveStatus: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/users/active-status/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["users"],
+    }),
   }),
 });
 
@@ -92,4 +101,5 @@ export const {
   useUpdateRemarkMutation,
   useUpdateProileMutation,
   useAddMotherAdminBalanceMutation,
+  useUpdateActiveStatusMutation,
 } = usersApi;

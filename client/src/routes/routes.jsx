@@ -38,13 +38,9 @@ import DashboardDeposits from "../Pages/Dashboard/DashboardDeposits";
 import DashboardWithdraw from "../Pages/Dashboard/DashboardWithdraw";
 import ColorControl from "../Pages/Dashboard/ColorControl";
 import DepositMethod from "../Pages/Dashboard/DepositMethod";
-import Admin from "../Pages/Admin";
 import MotherAdminRoute from "./MotherAdminRoute";
-import AgentLogin from "../Pages/AgentLogin";
-import SubAgentLogin from "../Pages/SubAgentLogin";
-import MasterLogin from "../Pages/MasterLogin";
-import SubAdminLogin from "../Pages/SubAdminLogin";
-import MotherAdminLogin from "../Pages/MotherAdminLogin";
+import LoginForm from "../Pages/LoginForm";
+import NotFound from "../Pages/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -184,12 +180,21 @@ const router = createBrowserRouter([
       },
     ],
   },
-  { path: "/motheradmin", element: <MotherAdminLogin /> },
-  { path: "/admin", element: <Admin /> },
-  { path: "/subadmin", element: <SubAdminLogin /> },
-  { path: "/master", element: <MasterLogin /> },
-  { path: "/agent", element: <AgentLogin /> },
-  { path: "/subagent", element: <SubAgentLogin /> },
+  {
+    path: "/motheradmin",
+    element: <LoginForm role="mother-admin" title="Mother Admin" />,
+  },
+  { path: "/admin", element: <LoginForm role="admin" title="Admin" /> },
+  {
+    path: "/subadmin",
+    element: <LoginForm role="sub-admin" title="Sub Admin" />,
+  },
+  { path: "/master", element: <LoginForm role="master" title="Master" /> },
+  { path: "/agent", element: <LoginForm role="agent" title="Agent" /> },
+  {
+    path: "/subagent",
+    element: <LoginForm role="sub-agent" title="Sub Agent" />,
+  },
   { path: "/accountsummary", element: <AccountSummary /> },
   { path: "/accounttabs", element: <AccountTabs /> },
   { path: "/accountstatementtabs", element: <AccountStatementTabs /> },
@@ -197,6 +202,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

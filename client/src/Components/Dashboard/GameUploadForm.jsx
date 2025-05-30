@@ -55,9 +55,9 @@ const GameUploadForm = ({ closeModal }) => {
           toast.error(result.error.data.error);
         }
       }
-      // eslint-disable-next-line no-unused-vars
     } catch (error) {
       toast.error("Failed to upload game");
+      console.log(error);
     } finally {
       setLoading(false);
     }

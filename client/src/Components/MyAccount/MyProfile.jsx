@@ -61,7 +61,6 @@ const MyProfile = () => {
 
   // Handle saving the updated data
   const handleSave = async () => {
-    console.log("formData:", formData);
     // eslint-disable-next-line no-unused-vars
     const { title, ...profileInfo } = formData;
     const result = await updateProfile({
