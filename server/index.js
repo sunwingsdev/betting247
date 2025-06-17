@@ -9,6 +9,11 @@ const { upload, deleteFile } = require("./utils");
 // import API modules
 const usersApi = require("./apis/usersApi/usersApi");
 const homeControlApi = require("./apis/homeControlApi/homeControlApi");
+const colorControlApi = require("./apis/colorControlApi/colorControlApi");
+const gameApi = require("./apis/gameApi/gameApi");
+const depositApi = require("./apis/depsoitsApi/depsoitsApi");
+const withdrawApi = require("./apis/withdrawApi/withdrawApi");
+const paymentMethodApi = require("./apis/paymentMethodApi/paymentMethodApi");
 
 const port = process.env.PORT || 5000;
 
@@ -17,11 +22,11 @@ const corsConfig = {
   origin: [
     "http://localhost:5173",
     "http://localhost:5174",
-    "https://capewin.com",
-    "http://capewin.com",
-    "http://www.capewin.com",
-    "www.capewin.com",
-    "capewin.com",
+    `https://${process.env.SITE_URL}`,
+    `http://${process.env.SITE_URL}`,
+    `http://www.${process.env.SITE_URL}`,
+    `www.${process.env.SITE_URL}`,
+    `${process.env.SITE_URL}`,
     "*",
   ],
   credentials: true,
@@ -84,10 +89,24 @@ async function run() {
     // Collections
     const usersCollection = client.db("baji").collection("users");
     const homeControlsCollection = client.db("baji").collection("homeControls");
+    const colorControlsCollection = client
+      .db("baji")
+      .collection("colorControls");
+    const gamesCollection = client.db("baji").collection("games");
+    const depositsCollection = client.db("baji").collection("deposits");
+    const withdrawsCollection = client.db("baji").collection("withdraws");
+    const paymentMethodsCollection = client
+      .db("baji")
+      .collection("paymentMethods");
 
     // API routes
     app.use("/users", usersApi(usersCollection));
     app.use("/home-controls", homeControlApi(homeControlsCollection));
+    app.use("/color-controls", colorControlApi(colorControlsCollection));
+    app.use("/games", gameApi(gamesCollection));
+    app.use("/deposits", depositApi(depositsCollection, usersCollection));
+    app.use("/withdraws", withdrawApi(withdrawsCollection, usersCollection));
+    app.use("/paymentmethod", paymentMethodApi(paymentMethodsCollection));
 
     await client.db("admin").command({ ping: 1 });
     console.log("Connected to MongoDB!!!✅");

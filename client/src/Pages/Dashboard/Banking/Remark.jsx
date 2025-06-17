@@ -18,7 +18,7 @@ const Remark = ({ user }) => {
     }
   };
   return (
-    <>
+    <div className="flex gap-1 items-center justify-center">
       <input
         className={`w-40 h-6 ${
           user?.remark && !editMode ? "border-none" : " border border-black"
@@ -53,7 +53,7 @@ const Remark = ({ user }) => {
           {"Update"}
         </button>
       )}
-    </>
+    </div>
   );
 };
 

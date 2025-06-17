@@ -15,7 +15,7 @@ const DynamicModal = ({ isOpen, closeModal, children }) => {
         />
 
         {/* Modal Content */}
-        <div className="relative bg-white rounded-lg max-w-md w-full mx-auto p-6">
+        <div className="relative max-w-[900px] w-[700px] mx-auto bg-white px-4 py-2">
           {children}
           <button onClick={closeModal}>
             <svg
@@ -24,7 +24,7 @@ const DynamicModal = ({ isOpen, closeModal, children }) => {
               viewBox="0 0 24 24"
               strokeWidth="2"
               stroke="currentColor"
-              className=" absolute top-0 right-0 w-5 lg:w-5 h-4 text-white  bg-red-500 hover:bg-red-600"
+              className=" absolute top-0 right-0 w-6 lg:w-7 h-6 text-white  bg-red-500 hover:bg-red-600"
             >
               <path
                 strokeLinecap="round"

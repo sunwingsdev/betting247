@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import loginImage from "../../assets/betx365 login.jpg";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import bkashImage from "../../assets/bkash.jpg";
 import nogodImage from "../../assets/nogod.jpg";
@@ -12,8 +11,10 @@ import {
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../../redux/slices/authSlice";
 import toast from "react-hot-toast";
+import { useGetHomeControlsQuery } from "../../redux/features/allApis/homeControlApi/homeControlApi";
 
 const Login = () => {
+  const { data: homeControls } = useGetHomeControlsQuery();
   const [loginUser, { isLoading }] = useLoginUserMutation();
   const [getUser] = useLazyGetAuthenticatedUserQuery();
   const dispatch = useDispatch();
@@ -24,6 +25,12 @@ const Login = () => {
   const [validationCode, setValidationCode] = useState(generateRandomCode());
   const [enteredValidationCode, setEnteredValidationCode] = useState(""); // State for entered validation code
 
+  const logoControl = homeControls?.find(
+    (control) => control.category === "logo" && control.isSelected
+  );
+  const loginImageControl = homeControls?.find(
+    (control) => control.category === "login-image" && control.isSelected
+  );
   function generateRandomCode() {
     return Math.floor(1000 + Math.random() * 9000).toString();
   }
@@ -43,17 +50,26 @@ const Login = () => {
 
       if (loginData.token) {
         const { data: userData } = await getUser(loginData.token);
+        if (
+          userData?.status === "banned" ||
+          userData?.status === "deactivated" ||
+          userData?.status === null ||
+          userData?.status === undefined
+        ) {
+          toast.error("Your account is deactivated or banned");
+          return;
+        }
+        if (userData?.role !== "user") {
+          toast.error("You are not allowed to login");
+          return;
+        }
         dispatch(setCredentials({ token: loginData.token, user: userData }));
         toast.success("Login successful", {
           appearance: "success",
           autoDismiss: true,
         });
         resetValidationCode();
-        if (userData?.role !== "admin") {
-          navigate("/");
-        } else {
-          navigate("/admindashboard");
-        }
+        navigate("/");
       }
       // eslint-disable-next-line no-unused-vars
     } catch (error) {
@@ -65,12 +81,19 @@ const Login = () => {
     }
   };
   return (
-    <div className="  flex flex-col bg-commonYellowColor   ">
-      <div className="   relative   ">
+    <div className="flex flex-col bg-commonYellowColor h-screen">
+      <div className="relative">
         <img
-          src={loginImage}
+          src={`${import.meta.env.VITE_BASE_API_URL}${
+            loginImageControl?.image
+          }`}
           alt=""
-          className=" w-full object-cover  clip-top-utilities   "
+          className=" w-full object-cover"
+        />
+        <img
+          className="absolute top-16 left-1/2 transform -translate-x-1/2 w-1/2"
+          src={`${import.meta.env.VITE_BASE_API_URL}${logoControl?.image}`}
+          alt=""
         />
         <span
           className="absolute bg-signUpColor rounded-full top-2 right-2 p-2"
@@ -168,13 +191,15 @@ const Login = () => {
           </div>
           <div className="text-center">
             <button
-              disabled={!isValidationCodeValid || !username || !password || isLoading}
+              disabled={
+                !isValidationCodeValid || !username || !password || isLoading
+              }
               className={`${
                 !isValidationCodeValid ? "opacity-70 cursor-not-allowed" : ""
               } bg-signUpColor text-loginColor w-full py-1 font-bold rounded-md`}
               onClick={handelLogin}
             >
-              {isLoading ? "Loading..." : 'Login'}
+              {isLoading ? "Loading..." : "Login"}
             </button>
           </div>
         </div>
@@ -213,7 +238,7 @@ const Login = () => {
             </h3>
           </div>
         </div>
-        <div className="w-full bg-custom-gradient  py-6">
+        <div className="w-full bg-custom-gradient  py-6 absolute bottom-0">
           <div className="flex flex-row items-center border-b border-customWhite pt-1  w-full justify-center gap-2 pb-2">
             <span className="  rounded-full p-1">
               <svg
