@@ -10,41 +10,23 @@ const usersApi = (usersCollection) => {
   // Middleware to validate JWT tokens
   const authenticateToken = (req, res, next) => {
     const authHeader = req.header("Authorization");
-    if (!authHeader) {
+    if (!authHeader)
       return res
         .status(401)
         .json({ error: "Access denied. No token provided." });
-    }
-
-    // Check if header has 'Bearer ' prefix
-    if (!authHeader.startsWith("Bearer ")) {
-      return res
-        .status(401)
-        .json({ error: "Access denied. Invalid token format." });
-    }
 
     const token = authHeader.split(" ")[1];
-    if (!token) {
+    if (!token)
       return res
         .status(401)
         .json({ error: "Access denied. Invalid token format." });
-    }
 
     try {
-      console.log("Token received:", token);
-      console.log("JWT Secret used:", jwtSecret);
-
-      const decoded = jwt.verify(token, jwtSecret, { algorithms: ["HS256"] }); // specify algorithm if needed
-      console.log("Decoded token:", decoded);
-
+      const decoded = jwt.verify(token, jwtSecret);
       req.user = decoded;
       next();
     } catch (error) {
-      console.error("Token verification error:", error.message);
-      if (error.name === "TokenExpiredError") {
-        return res.status(403).json({ error: "Token expired." });
-      }
-      return res.status(403).json({ error: "Invalid token." });
+      return res.status(403).json({ error: "Invalid or expired token." });
     }
   };
 
@@ -65,6 +47,7 @@ const usersApi = (usersCollection) => {
       const hashedPassword = await bcrypt.hash(userInfo?.password, 10);
       const newUser = { ...userInfo, password: hashedPassword };
       newUser.createdAt = new Date();
+      newUser.status = "activated";
       const result = await usersCollection.insertOne(newUser);
       res.status(201).send(result);
     } catch (error) {
@@ -75,6 +58,7 @@ const usersApi = (usersCollection) => {
   // Login a user and validate JWT issuance
   router.post("/login", async (req, res) => {
     const { username, password } = req.body;
+
     if (!username || !password) {
       return res
         .status(400)

@@ -116,7 +116,7 @@ const AdminDashboard = () => {
   );
 
   const approvedDepositsAmount = approvedDeposits?.reduce(
-    (sum, deposit) => sum + deposit.pbuAmount,
+    (sum, deposit) => sum + deposit.PBUAmount,
     0
   );
 
@@ -125,7 +125,7 @@ const AdminDashboard = () => {
   );
 
   const approvedWithdrawsAmount = approvedWithdraws?.reduce(
-    (sum, withdraw) => sum + withdraw.pbuAmount,
+    (sum, withdraw) => sum + withdraw.PBUAmount,
     0
   );
 

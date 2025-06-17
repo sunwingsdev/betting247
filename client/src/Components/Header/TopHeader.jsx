@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { CiDollar } from "react-icons/ci";
 import { IoReload } from "react-icons/io5";
 import { HiOutlineArrowRightStartOnRectangle } from "react-icons/hi2";
-import { IoSettingsSharp } from "react-icons/io5";
+import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
@@ -74,13 +74,13 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
       id: 2,
       name: "Deposit",
       path: "/myaccount#2",
-      condition: user?.createdBy === "self",
+      // condition: user?.createdBy === "self",
     },
     {
       id: 3,
       name: "Withdraw",
       path: "/myaccount#4",
-      condition: user?.createdBy === "self",
+      // condition: user?.createdBy === "self",
     },
     { id: 4, name: "Balance Overview", path: "/myaccount#6" },
     { id: 5, name: "Account Statement", path: "/myaccount#8" },
@@ -204,7 +204,7 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
           headingColorControl?.secondBackgroundColor || "#000000"
         })`,
       }}
-      className="px-1 py-1 md:py-3 md:px-2   md:flex flex-row gap-2 items-center justify-between"
+      className="bg-[linear-gradient(-180deg,#414141,#000)] py-2 pe-1 md:flex flex-row gap-2 items-center justify-between"
     >
       <div className="flex flex-row items-center justify-between w-full lg:w-auto gap-2">
         {/* Logo */}
@@ -381,32 +381,34 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
         </>
       ) : (
         <>
-          <div className="flex flex-row items-center justify-center gap-1 lg:gap-2 relative">
-            <div className="lg:hidden flex flex-row   text-customWhite bg-signUpColor  rounded-[4px]  p-1  items-center ">
+          <div className="flex flex-row items-center justify-center gap-1  lg:gap-2 relative text-[#ffb427]">
+            <div className="lg:hidden flex flex-row border-black shadow-[inset_0_1px_rgba(255,255,255,0.4)] rounded-[4px] px-6 py-1  items-center ">
               <span>
                 <CiDollar className="w-5  h-auto stroke-1" />
               </span>
-
-              <h3 className="text-xs text-textYellowColor">Bet</h3>
+              <h3 className="text-xs">Bet</h3>
             </div>
-            <div className="flex flex-row items-center font-medium rounded-[4px]  bg-signUpColor lg:bg-none whitespace-nowrap text-[10px] lg:text-xs lg:border border-sliderButtonMediumGray text-textYellowColor  lg:text-customWhite relative">
-              <div className="flex flex-row items-center md:py-1 hover:underline cursor-pointer  px-2 gap-0.5  md:gap-2">
-                <h3 className="">
-                  Main{" "}
-                  <span className="font-bold ">
-                    {" "}
-                    PBU {loading ? "..." : singleUser?.balance || 0.0}
-                  </span>
-                </h3>
-                <p className="">
+            <div className="flex flex-row items-center font-medium rounded-[4px] border-black shadow-[inset_0_1px_rgba(255,255,255,0.4)] lg:bg-none whitespace-nowrap text-[10px] lg:text-xs lg:border text-textYellowColor  lg:text-customWhite relative">
+              <div className="flex flex-row items-center md:py-1 hover:underline cursor-pointer  px-2 gap-4  md:gap-6">
+                <div className="flex flex-col bg-[rgba(255,255,255),0.1]">
                   {" "}
-                  Exposure <span className="font-bold ">0.00</span>
-                </p>
-                <button className="text-[10px] border  px-3 rounded-md border-sliderButtonMediumGray">
+                  <h3 className="">
+                    Main{" "}
+                    <span className="font-bold ">
+                      {" "}
+                      PBU {loading ? "..." : singleUser?.balance || 0.0}
+                    </span>
+                  </h3>
+                  <p className="">
+                    {" "}
+                    Exposure <span className="font-bold ">0.00</span>
+                  </p>
+                </div>
+                <button className="text-[10px] border  px-3 rounded border-[#ffb427]">
                   +4
                 </button>
               </div>
-              <span className="border-l py-[6px] lg:py-1 px-1 text-customWhite lg:text-sliderButtonMediumGray border-customBlack lg:border-sliderButtonMediumGray">
+              <span className="border-l py-[6px] lg:py-1 px-1 lg:text-sliderButtonMediumGray border-customBlack lg:border-sliderButtonMediumGray">
                 <IoReload
                   onClick={reloadBalance}
                   className={`w-4 h-auto stroke-2 ${
@@ -416,10 +418,12 @@ const TopHeader = ({ settingOpen, setSettingOpen }) => {
               </span>
             </div>
             <span
-              className="text-customWhite bg-signUpColor  rounded-[4px] p-1 lg:hidden"
-              onClick={() => setSettingOpen((prev) => !prev)}
+              className="px-1.5 py-0.5 inline-flex flex-col items-center justify-center rounded-[4px] lg:hidden border-black shadow-[inset_0_1px_rgba(255,255,255,0.4)]"
+              // onClick={() => setSettingOpen((prev) => !prev)}
+              onClick={() => navigate("/myaccount#2")}
             >
-              <IoSettingsSharp className="w-5 h-auto stroke-2" />
+              <MdOutlineAccountBalanceWallet className="w-4" />
+              <span className="text-[8px]">D/W</span>
             </span>
             <div
               ref={accountRef}

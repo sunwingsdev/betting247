@@ -18,7 +18,6 @@ const homeControlApi = (homeControlCollection) => {
     const result = await homeControlCollection.find().toArray();
     res.send(result);
   });
-
   router.patch("/:id", async (req, res) => {
     const { id } = req.params;
 

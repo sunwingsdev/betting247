@@ -12,7 +12,7 @@ const DemoGame = () => {
     return <div>Loading...</div>;
   }
 
-  if (!game.link) {
+  if (!game?.link) {
     return (
       <div className="text-center text-2xl font-bold text-red-500">
         This game is not available to play
@@ -24,7 +24,7 @@ const DemoGame = () => {
     <div>
       <iframe
         className="w-full h-[600px] max-h-screen"
-        src={game.link}
+        src={game?.link}
         frameBorder="0"
         allowFullScreen
       ></iframe>

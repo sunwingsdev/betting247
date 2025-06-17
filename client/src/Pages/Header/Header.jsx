@@ -1,16 +1,15 @@
 import { Link, useLocation } from "react-router-dom";
 import MenuHeader from "../../Components/Header/MenuHeader";
 import { useSelector } from "react-redux";
-// import gameLogo from "../../assets/entrance.svg";
 
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
   const buttons = [
     {
-      label: "Home",
-      icon: "M3 9.75L12 3l9 6.75V20a1 1 0 01-1 1h-4a1 1 0 01-1-1v-5a1 1 0 00-1-1h-2a1 1 0 00-1 1v5a1 1 0 01-1 1H4a1 1 0 01-1-1V9.75z",
+      label: "Sports",
+      icon: "M8 12h8m-4 0V8m8-5H4a1 1 0 00-1 1v2a3 3 0 003 3h1a4 4 0 008 0h1a3 3 0 003-3V4a1 1 0 00-1-1zM8 21h8m-8-3h8m-6 0v-3m4 3v-3",
       bgColor: "",
-      link: "/",
+      link: "/sports",
     },
     {
       label: "In-play",
@@ -19,16 +18,16 @@ const Header = () => {
       link: "/inplay",
     },
     {
-      label: "Sports",
-      icon: "M8 12h8m-4 0V8m8-5H4a1 1 0 00-1 1v2a3 3 0 003 3h1a4 4 0 008 0h1a3 3 0 003-3V4a1 1 0 00-1-1zM8 21h8m-8-3h8m-6 0v-3m4 3v-3",
+      label: "Home",
+      icon: "M3 9.75L12 3l9 6.75V20a1 1 0 01-1 1h-4a1 1 0 01-1-1v-5a1 1 0 00-1-1h-2a1 1 0 00-1 1v5a1 1 0 01-1 1H4a1 1 0 01-1-1V9.75z",
       bgColor: "",
-      link: "/sports",
+      link: "/",
     },
     {
-      label: "MultiMarket",
+      label: "Promotion",
       icon: "M18 3V5H17V11L19 14V16H13V23H11V16H5V14L7 11V5H6V3H18ZM9 5V11.6056L7.4037 14H16.5963L15 11.6056V5H9Z",
       bgColor: "",
-      link: "/multimarket",
+      link: "/promotion",
     },
 
     {
@@ -46,18 +45,21 @@ const Header = () => {
       {/* bottom navbar for small screen */}
 
       <div className="fixed bottom-0 w-full z-50  lg:hidden">
-        <div className="grid grid-cols-5 justify-items-center bg-footer-gradient text-customWhite text-xs  whitespace-nowrap font-medium">
+        <div className="grid grid-cols-5 items-center bg-footer-gradient text-customWhite text-xs  whitespace-nowrap font-medium">
           {buttons.map((btn, index) => (
             <Link
               key={index}
               to={btn.link}
-              className={`px-1 py-1 ${
+              className={`px-1 py-1 inline-flex flex-col items-center justify-center ${
                 location.pathname === btn.link
                   ? "bg-footer-gradient-active"
                   : "hover:bg-footer-gradient-active"
               }`}
             >
-              <button key={index} className=" flex flex-col items-center ">
+              <button
+                key={index}
+                className="inline-flex flex-col items-center justify-center"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -72,7 +74,7 @@ const Header = () => {
                     d={btn.icon}
                   />
                 </svg>
-                {btn.label}
+                <p>{btn.label}</p>
               </button>
             </Link>
           ))}

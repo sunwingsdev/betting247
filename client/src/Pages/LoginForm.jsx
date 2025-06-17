@@ -31,7 +31,7 @@ const LoginForm = ({ role, title }) => {
     (control) => control.category === "logo" && control.isSelected
   );
   const imageControl = homeControls?.find(
-    (control) => control.category === "admin-image" && control.isSelected
+    (control) => control.category === "motheradmin-image" && control.isSelected
   );
 
   function generateCode() {
@@ -46,7 +46,6 @@ const LoginForm = ({ role, title }) => {
 
   const onSubmit = async (data) => {
     const { username, password } = data;
-    console.log(username, password);
     try {
       const { data: loginData } = await loginUser({ username, password });
 
