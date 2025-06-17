@@ -39,7 +39,7 @@ const LogoUploadForm = ({ closeModal }) => {
           };
           const result = await addHomeControl(logoInfo);
           if (result.data.insertedId) {
-            toast.success("Logo uploaded successfully");
+            toast.success("Logo added successfully");
             setLogoPreview(null);
             setLogoFile(null);
             setLoading(false);
@@ -63,7 +63,7 @@ const LogoUploadForm = ({ closeModal }) => {
           {!logoPreview ? (
             <label className="w-full h-full flex flex-col items-center text-center cursor-pointer relative">
               <div className="text-gray-400 text-4xl mb-4">📤</div>
-              <p className="text-gray-500">Select a logo to upload</p>
+              <p className="text-gray-500">Select a image to upload</p>
               <p className="text-gray-400 text-sm">or drag and drop it here</p>
               <input
                 type="file"

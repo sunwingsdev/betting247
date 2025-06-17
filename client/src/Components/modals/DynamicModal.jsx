@@ -15,7 +15,7 @@ const DynamicModal = ({ isOpen, closeModal, children }) => {
         />
 
         {/* Modal Content */}
-        <div className="relative max-w-[900px] w-[700px] mx-auto bg-white">
+        <div className="relative max-w-[900px] w-[700px] mx-auto bg-white px-4 py-2">
           {children}
           <button onClick={closeModal}>
             <svg

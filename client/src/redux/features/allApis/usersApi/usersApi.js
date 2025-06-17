@@ -61,6 +61,33 @@ const usersApi = baseApi.injectEndpoints({
       query: (id) => `users/${id}`,
       providesTags: ["users"],
     }),
+
+    updateProile: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/users/profile/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["users"],
+    }),
+
+    addMotherAdminBalance: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/users/mother-admin-balance/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["users"],
+    }),
+
+    updateActiveStatus: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/users/active-status/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["users"],
+    }),
   }),
 });
 
@@ -72,4 +99,7 @@ export const {
   useUpdateBalanceMutation,
   useLazyGetUserByIdQuery,
   useUpdateRemarkMutation,
+  useUpdateProileMutation,
+  useAddMotherAdminBalanceMutation,
+  useUpdateActiveStatusMutation,
 } = usersApi;

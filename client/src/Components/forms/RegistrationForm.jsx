@@ -14,12 +14,14 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { useAddUserMutation } from "../../redux/features/allApis/usersApi/usersApi";
+import banner from "../../assets/registerBanner.png";
+import { useGetHomeControlsQuery } from "../../redux/features/allApis/homeControlApi/homeControlApi";
 
 const RegistrationForm = ({ onClose }) => {
+  const { data: homeControls } = useGetHomeControlsQuery();
   const [addUser, { isLoading }] = useAddUserMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -28,10 +30,15 @@ const RegistrationForm = ({ onClose }) => {
     formState: { errors },
   } = useForm();
 
+  const control = homeControls?.find(
+    (control) => control.category === "logo" && control.isSelected
+  );
+
   const onSubmit = async (data) => {
     // eslint-disable-next-line no-unused-vars
     const { confirmPassword, ...userInfo } = data;
     userInfo.createdBy = "self";
+    userInfo.role = "user";
     const result = await addUser(userInfo);
     if (result?.data?.insertedId) {
       toast.success("User created successfully");
@@ -39,7 +46,7 @@ const RegistrationForm = ({ onClose }) => {
       reset();
     }
     if (result?.error) {
-      toast.error("Something went wrong");
+      toast.error(result.error.data.error);
     }
   };
 
@@ -47,10 +54,17 @@ const RegistrationForm = ({ onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 w-full min-h-screen">
       <div className="w-full max-w-2xl bg-gray-900 flex rounded-lg shadow-lg">
         {/* Left Side (Placeholder) */}
-        <div className="md:w-1/2 bg-gray-900 hidden md:flex items-center justify-center text-white p-6"></div>
+        <div className="md:w-1/2 bg-gray-900 hidden md:flex items-center justify-center text-white relative">
+          <img src={banner} alt="" />
+          <img
+            className="absolute top-20 px-6 w-full"
+            src={`${import.meta.env.VITE_BASE_API_URL}${control?.image}`}
+            alt=""
+          />
+        </div>
 
         {/* Right Side (Registration Form) */}
-        <div className="w-full md:w-1/2 bg-[#ffb427] p-6 relative rounded-r-lg">
+        <div className="w-full md:w-1/2 bg-[#ffb427] p-6 relative">
           {/* Close Button */}
           <button
             onClick={onClose}

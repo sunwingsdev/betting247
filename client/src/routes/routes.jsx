@@ -23,7 +23,6 @@ import PrivateRoute from "./PrivateRoute";
 import DemoGame from "../Pages/DemoGame/DemoGame";
 import Banking from "../Pages/Dashboard/Banking/Banking";
 import HomeControl from "../Pages/Dashboard/HomeControl";
-import Banner from "../Pages/Banner";
 import Game from "../Pages/Dashboard/Game";
 import BetList from "../Pages/Dashboard/BetList";
 import BetListLive from "../Pages/Dashboard/BetListLive";
@@ -34,6 +33,14 @@ import AccountSummary from "../Components/Dashboard/AccountSummary";
 import AccountTabs from "../Components/Dashboard/AccountTabs";
 import AccountStatementTabs from "../Components/Dashboard/AccountStatementTabs";
 import Profile from "../Components/Dashboard/Profile";
+import AddGame from "../Pages/Dashboard/AddGame";
+import DashboardDeposits from "../Pages/Dashboard/DashboardDeposits";
+import DashboardWithdraw from "../Pages/Dashboard/DashboardWithdraw";
+import ColorControl from "../Pages/Dashboard/ColorControl";
+import DepositMethod from "../Pages/Dashboard/DepositMethod";
+import MotherAdminRoute from "./MotherAdminRoute";
+import LoginForm from "../Pages/LoginForm";
+import NotFound from "../Pages/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -61,7 +68,14 @@ const router = createBrowserRouter([
         element: <Sports />,
       },
       { path: "/womenleague", element: <WommenLeague /> },
-      { path: "/myaccount", element: <MyAccount /> },
+      {
+        path: "/myaccount",
+        element: (
+          <PrivateRoute>
+            <MyAccount />
+          </PrivateRoute>
+        ),
+      },
       {
         path: "/myaccountphone",
         element: (
@@ -84,21 +98,103 @@ const router = createBrowserRouter([
     ),
     children: [
       { path: "", element: <AdminDashboard /> },
-      { path: "generalsetting", element: <Setting /> },
-      { path: "adminsetting", element: <AdminSetting /> },
-      { path: "gameapi", element: <Game /> },
-      { path: "homecontrol", element: <HomeControl /> },
+      {
+        path: "generalsetting",
+        element: (
+          <MotherAdminRoute>
+            <Setting />
+          </MotherAdminRoute>
+        ),
+      },
+      {
+        path: "adminsetting",
+        element: (
+          <MotherAdminRoute>
+            <AdminSetting />
+          </MotherAdminRoute>
+        ),
+      },
+      {
+        path: "gameapi",
+        element: (
+          <MotherAdminRoute>
+            <Game />
+          </MotherAdminRoute>
+        ),
+      },
+      {
+        path: "homecontrol",
+        element: (
+          <MotherAdminRoute>
+            <HomeControl />
+          </MotherAdminRoute>
+        ),
+      },
+      {
+        path: "colorcontrol",
+        element: (
+          <MotherAdminRoute>
+            <ColorControl />
+          </MotherAdminRoute>
+        ),
+      },
+      {
+        path: "addgame",
+        element: (
+          <MotherAdminRoute>
+            <AddGame />
+          </MotherAdminRoute>
+        ),
+      },
       { path: "myaccount", element: <MyAccount /> },
       { path: "betlist", element: <BetList /> },
       { path: "betlive", element: <BetListLive /> },
       { path: "banking", element: <Banking /> },
       { path: "activegame", element: <ActiveGame /> },
       { path: "deactivegame", element: <DeactiveGame /> },
-      { path: "livegame", element: <LiveGame /> },
+      {
+        path: "livegame",
+        element: (
+          <MotherAdminRoute>
+            <LiveGame />
+          </MotherAdminRoute>
+        ),
+      },
       { path: "usersdata/:role", element: <UsersData /> },
+      { path: "deposits", element: <DashboardDeposits /> },
+      {
+        path: "withdraws",
+        element: (
+          <MotherAdminRoute>
+            <DashboardWithdraw />
+          </MotherAdminRoute>
+        ),
+      },
+      {
+        path: "depositmethod",
+        element: (
+          <MotherAdminRoute>
+            <DepositMethod />
+          </MotherAdminRoute>
+        ),
+      },
     ],
   },
-  { path: "/admin", element: <Banner /> },
+  {
+    path: "/motheradmin",
+    element: <LoginForm role="mother-admin" title="Mother Admin" />,
+  },
+  { path: "/admin", element: <LoginForm role="admin" title="Admin" /> },
+  {
+    path: "/subadmin",
+    element: <LoginForm role="sub-admin" title="Sub Admin" />,
+  },
+  { path: "/master", element: <LoginForm role="master" title="Master" /> },
+  { path: "/agent", element: <LoginForm role="agent" title="Agent" /> },
+  {
+    path: "/subagent",
+    element: <LoginForm role="sub-agent" title="Sub Agent" />,
+  },
   { path: "/accountsummary", element: <AccountSummary /> },
   { path: "/accounttabs", element: <AccountTabs /> },
   { path: "/accountstatementtabs", element: <AccountStatementTabs /> },
@@ -106,6 +202,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

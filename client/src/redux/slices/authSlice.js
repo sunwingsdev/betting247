@@ -4,6 +4,7 @@ const initialState = {
   token: localStorage.getItem("token") || null,
   user: JSON.parse(localStorage.getItem("user")) || null,
   isAuthenticated: !!localStorage.getItem("token"),
+  singleUser: null, // Add singleUser to the initial state
 };
 
 const authSlice = createSlice({
@@ -23,12 +24,29 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      state.singleUser = null;
     },
     setSingleUser: (state, { payload }) => {
-      state.singleUser = payload; // Update singleUser in the state
+      state.singleUser = payload;
+    },
+    checkUserStatus: (state) => {
+      if (
+        state.user &&
+        (state.user.status === "banned" ||
+          state.user.status === "deactivated" ||
+          state.user.status === null ||
+          state.user.status === undefined)
+      ) {
+        state.token = null;
+        state.user = null;
+        state.isAuthenticated = false;
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+      }
     },
   },
 });
 
-export const { setCredentials, logout, setSingleUser } = authSlice.actions;
+export const { setCredentials, logout, setSingleUser, checkUserStatus } =
+  authSlice.actions;
 export default authSlice.reducer;

@@ -1,61 +1,120 @@
+import moment from "moment";
+import { useSelector } from "react-redux";
+import { useGetWithdrawsQuery } from "../../redux/features/allApis/withdrawApi/withdrawApi";
+
 const WithdrawHistory = () => {
+  const { data: withdraws, isLoading } = useGetWithdrawsQuery();
+  const { user } = useSelector((state) => state.auth);
+
+  const myWithdraws = withdraws?.filter(
+    (deposit) => deposit?.userId === user?._id
+  );
+
+  const sortedWithdraws = myWithdraws?.slice().sort((a, b) => {
+    return moment(b.createdAt).diff(moment(a.createdAt));
+  });
+
+  if (isLoading) return <div className="text-center mt-4">Loading...</div>;
+
   return (
-    <div className="w-4/5">
-      <h1 className="text-black mb-1">Withdraw History</h1>
-      <div className="bg-[#e0e6e6] p-2">
-        <form className="flex items-center gap-3">
-          <input
-            type="text"
-            name=""
-            placeholder="Search Transaction Id"
-            className="px-2 py-1 bg-[#ced5da] placeholder-gray-600 outline-none"
-          />
-          <div className="flex items-center gap-3">
-            <button className="bg-black text-yellow-400 rounded px-3 py-0.5 font-bold">
-              Get Request
-            </button>
-            <button className="bg-black text-yellow-400 rounded px-3 py-0.5 font-bold">
-              Clear Filter
-            </button>
-          </div>
-        </form>
-      </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-300">
-          <thead className="">
-            <tr className=" text-left text-sm font-semibold whitespace-nowrap">
-              <th className="px-4 py-2 border-y border-black">
-                Account Number
-              </th>
-              <th className="px-4 py-2 border-y border-black">Trx Id</th>
-              <th className="px-4 py-2 border-y border-black">Payment Type</th>
-              <th className="px-4 py-2 border-y border-black">Currency</th>
-              <th className="px-4 py-2 border-y border-black">PBU Amount</th>
-              <th className="px-4 py-2 border-y border-black">
-                Remaining amount
-              </th>
-              <th className="px-4 py-2 border-y border-black">
-                Transaction Id
-              </th>
-              <th className="px-4 py-2 border-y border-black">
-                Rejected Reason
-              </th>
-              <th className="px-4 py-2 border-y border-black">Created On</th>
-              <th className="px-4 py-2 border-y border-black">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td
-                colSpan="10"
-                className="text-center py-6 text-gray-600 bg-gray-100"
-              >
-                No Data Found
+    <div className="overflow-x-auto ">
+      <table className="min-w-full divide-y divide-gray-300">
+        <thead className="bg-headerGray text-headingTextColor text-center">
+          <tr>
+            <th className="border-y bg-headerGray border-gray-300 px-4 py-2 text-center text-sm font-medium uppercase">
+              Method
+            </th>
+            <th className="border-y bg-headerGray border-gray-300 px-2 py-2 text-center text-sm font-medium uppercase">
+              Number
+            </th>
+            <th className="border-y bg-headerGray border-gray-300 px-2 py-2 text-center text-sm font-medium uppercase">
+              BDT Amount
+            </th>
+            <th className="border-y bg-headerGray border-gray-300 px-2 py-2 text-center text-sm font-medium uppercase">
+              PBU Amount
+            </th>
+            <th className="border-y bg-headerGray border-gray-300 px-12 py-2 text-center text-sm font-medium uppercase">
+              Status
+            </th>
+            <th className="border-y bg-headerGray border-gray-300 px-4 py-2 text-center text-sm font-medium uppercase">
+              Time
+            </th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {sortedWithdraws?.map((row, index) => (
+            <tr key={index} className="text-center">
+              <td className="capitalize border-b px-4 py-2 whitespace-nowrap text-sm text-gray-700">
+                {row?.method}
+              </td>
+              <td className="border-b px-4 py-2 whitespace-nowrap text-sm text-red-700">
+                {row.number}
+              </td>
+              <td className="border-b px-2 py-2 whitespace-nowrap text-sm text-gray-700">
+                {row?.bdtAmount}
+              </td>
+              <td className="border-b px-4 py-2 whitespace-nowrap text-sm text-gray-700">
+                {row?.pbuAmount}
+              </td>
+
+              <td className="border-b px-4 py-2 whitespace-nowrap text-sm text-gray-700">
+                <div className="flex flex-row items-center justify-center space-x-1 ">
+                  {row?.status === "pending" ? (
+                    <>
+                      <span className="text-yellow-800">
+                        <svg
+                          className="w-3 h-3 "
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 100 100"
+                        >
+                          <circle cx="50" cy="50" r="40" fill="yellow" />
+                        </svg>
+                      </span>
+                      <span className="text-yellow-800 capitalize">
+                        {row?.status}
+                      </span>
+                    </>
+                  ) : row?.status === "approved" ? (
+                    <>
+                      <span className="text-green-800">
+                        <svg
+                          className="w-3 h-3 "
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 100 100"
+                        >
+                          <circle cx="50" cy="50" r="40" fill="green" />
+                        </svg>
+                      </span>
+                      <span className="text-green-800 capitalize">
+                        {row?.status}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-red-600">
+                        <svg
+                          className="w-3 h-3 "
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 100 100"
+                        >
+                          <circle cx="50" cy="50" r="40" fill="red" />
+                        </svg>
+                      </span>
+                      <span className="text-red-800 capitalize">
+                        {row?.status}
+                      </span>
+                    </>
+                  )}
+                </div>
+              </td>
+              <td className="border-b px-12 py-2 whitespace-nowrap text-sm text-gray-700">
+                {" "}
+                {moment(row.createdAt).format("Do MMM YYYY, h:mm a")}
               </td>
             </tr>
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
